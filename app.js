@@ -1,5 +1,4 @@
 // Seleccionar elementos del DOM
-
 const taskForm = document.getElementById("task-form")
 const taskInput = document.getElementById("task-input")
 const taskList = document.getElementById("task-list")
@@ -11,35 +10,41 @@ const pendingTasks = document.getElementById("pending-tasks")
 const taskTemplate = document.getElementById("task-template")
 
 // Array de tareas
-
 let tasks = []
 
+// Guardar tareas en LocalStorage
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks))
+}
+
+// Cargar tareas guardadas
+function loadTasks() {
+  const storedTasks = localStorage.getItem("tasks")
+
+  if (storedTasks) {
+    tasks = JSON.parse(storedTasks)
+  }
+}
 
 // Crear tarea
-
 function createTask(title) {
-
   const task = {
     id: Date.now(),
     title: title,
     completed: false,
-    createdAt: new Date()
+    createdAt: new Date().toISOString()
   }
 
   tasks.push(task)
-
+  saveTasks()
   renderTasks()
 }
 
-
 // Renderizar tareas
-
 function renderTasks() {
-
   taskList.innerHTML = ""
 
   tasks.forEach(task => {
-
     const clone = taskTemplate.content.cloneNode(true)
 
     const checkbox = clone.querySelector(".task-checkbox")
@@ -51,26 +56,24 @@ function renderTasks() {
 
     checkbox.addEventListener("change", () => {
       task.completed = checkbox.checked
+      saveTasks()
       updateStats()
     })
 
     deleteBtn.addEventListener("click", () => {
       tasks = tasks.filter(t => t.id !== task.id)
+      saveTasks()
       renderTasks()
     })
 
     taskList.appendChild(clone)
-
   })
 
   updateStats()
 }
 
-
 // Actualizar estadísticas
-
 function updateStats() {
-
   const total = tasks.length
   const completed = tasks.filter(task => task.completed).length
   const pending = total - completed
@@ -80,11 +83,8 @@ function updateStats() {
   pendingTasks.textContent = pending
 }
 
-
 // Formulario
-
-taskForm.addEventListener("submit", function(e) {
-
+taskForm.addEventListener("submit", function (e) {
   e.preventDefault()
 
   const title = taskInput.value.trim()
@@ -92,7 +92,9 @@ taskForm.addEventListener("submit", function(e) {
   if (title === "") return
 
   createTask(title)
-
   taskInput.value = ""
-
 })
+
+// Inicializar aplicación
+loadTasks()
+renderTasks()
