@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>TaskFlow</h1>
+</header>
+
+<main>
+
+  <!-- Formulario para añadir tareas -->
+  <section class="task-form-section">
+
+    <form id="task-form">
+
+      <label for="task-input">Describe tu tarea</label>
+
+      <input
+        type="text"
+        id="task-input"
+        name="task"
+        placeholder="Describe tu tarea"
+        required
+      >
+
+      <button type="submit">Añadir</button>
+
+    </form>
+
+  </section>
+
+
+  <!-- Lista de tareas -->
+  <section class="task-list-section">
+
+    <ul id="task-list"></ul>
+
+  </section>
+
+</main>
+
+
+<!-- Panel de estadísticas -->
+<aside>
+
+  <h2>Estadísticas</h2>
+
+  <ul>
+
+    <li>Total: <span id="total-tasks">0</span></li>
+
+    <li>Completadas: <span id="completed-tasks">0</span></li>
+
+    <li>Pendientes: <span id="pending-tasks">0</span></li>
+
+  </ul>
+
+</aside>
+
+
+<footer>
+
+  <p>TaskFlow - Aplicación de gestión de tareas</p>
+
+</footer>
+
+
+<!-- Template para cada tarea -->
+<template id="task-template">
+
+  <li class="task-item">
+
+    <input type="checkbox" class="task-checkbox">
+
+    <span class="task-title"></span>
+
+    <button class="delete-task">🗑</button>
+
+  </li>
+
+</template>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
