@@ -6,89 +6,128 @@
   <title>TaskFlow</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <header>
+    <h1>TaskFlow</h1>
+  </header>
 
-<header>
-  <h1>TaskFlow</h1>
-</header>
+  <main>
+    <section class="task-form-section">
+      <form id="task-form">
+        <div class="form-group">
+          <label for="task-input">Describe tu tarea</label>
+          <input
+            type="text"
+            id="task-input"
+            name="task"
+            placeholder="Describe tu tarea"
+            required
+          >
+        </div>
 
-<main>
+        <div class="form-group">
+          <label for="task-tag">Tag opcional</label>
+          <input
+            type="text"
+            id="task-tag"
+            name="tag"
+            placeholder="Ej: casa, trabajo, estudio"
+          >
+        </div>
 
-  <!-- Formulario para añadir tareas -->
-  <section class="task-form-section">
+        <button type="submit">Añadir</button>
+      </form>
+    </section>
 
-    <form id="task-form">
+    <section class="filters-section" aria-label="Filtros de tareas">
+      <div class="filter-group">
+        <label for="search-input">Buscar tarea</label>
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Busca por título..."
+        >
+      </div>
 
-      <label for="task-input">Describe tu tarea</label>
+      <div class="filter-group">
+        <label for="status-filter">Filtrar por estado</label>
+        <select id="status-filter">
+          <option value="all">Todas</option>
+          <option value="pending">Pendientes</option>
+          <option value="completed">Completadas</option>
+        </select>
+      </div>
 
+      <div class="filter-group">
+        <label for="tag-filter">Filtrar por tag</label>
+        <select id="tag-filter">
+          <option value="all">Todos los tags</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="actions-section" aria-label="Acciones masivas">
+      <button id="complete-all-btn" type="button">Completar todas</button>
+      <button id="clear-completed-btn" type="button">Borrar completadas</button>
+    </section>
+
+    <section class="task-list-section">
+      <ul id="task-list"></ul>
+      <p id="empty-message">No hay tareas para mostrar.</p>
+    </section>
+  </main>
+
+  <aside>
+    <h2>Estadísticas</h2>
+    <ul>
+      <li>Total: <span id="total-tasks">0</span></li>
+      <li>Completadas: <span id="completed-tasks">0</span></li>
+      <li>Pendientes: <span id="pending-tasks">0</span></li>
+    </ul>
+
+    <h2>Tags creados</h2>
+    <ul id="tag-list">
+      <li>No hay tags todavía.</li>
+    </ul>
+  </aside>
+
+  <footer>
+    <p>TaskFlow - Aplicación de gestión de tareas</p>
+  </footer>
+
+  <template id="task-template">
+    <li class="task-item">
       <input
-        type="text"
-        id="task-input"
-        name="task"
-        placeholder="Describe tu tarea"
-        required
+        type="checkbox"
+        class="task-checkbox"
+        aria-label="Marcar tarea como completada"
       >
 
-      <button type="submit">Añadir</button>
+      <div class="task-content">
+        <span class="task-title"></span>
+        <span class="task-tag"></span>
+      </div>
 
-    </form>
+      <div class="task-buttons">
+        <button
+          class="edit-task"
+          type="button"
+          aria-label="Editar tarea"
+        >
+          Editar
+        </button>
 
-  </section>
+        <button
+          class="delete-task"
+          type="button"
+          aria-label="Eliminar tarea"
+        >
+          🗑
+        </button>
+      </div>
+    </li>
+  </template>
 
-
-  <!-- Lista de tareas -->
-  <section class="task-list-section">
-
-    <ul id="task-list"></ul>
-
-  </section>
-
-</main>
-
-
-<!-- Panel de estadísticas -->
-<aside>
-
-  <h2>Estadísticas</h2>
-
-  <ul>
-
-    <li>Total: <span id="total-tasks">0</span></li>
-
-    <li>Completadas: <span id="completed-tasks">0</span></li>
-
-    <li>Pendientes: <span id="pending-tasks">0</span></li>
-
-  </ul>
-
-</aside>
-
-
-<footer>
-
-  <p>TaskFlow - Aplicación de gestión de tareas</p>
-
-</footer>
-
-
-<!-- Template para cada tarea -->
-<template id="task-template">
-
-  <li class="task-item">
-
-    <input type="checkbox" class="task-checkbox">
-
-    <span class="task-title"></span>
-
-    <button class="delete-task">🗑</button>
-
-  </li>
-
-</template>
-
-
-<script src="app.js"></script>
-
+  <script src="app.js"></script>
 </body>
 </html>
