@@ -147,6 +147,7 @@ button {
 
 button {
   padding: 10px 16px;
+  min-height: 44px;
   border: none;
   background: var(--primary);
   color: white;
@@ -408,3 +409,6 @@ footer {
     width: 100%;
   }
 }
+
+
+
