@@ -1,6 +1,9 @@
 const taskForm = document.getElementById("task-form")
 const taskInput = document.getElementById("task-input")
 const taskTagInput = document.getElementById("task-tag")
+const taskStartInput = document.getElementById("task-start")
+const taskEndInput = document.getElementById("task-end")
+
 const searchInput = document.getElementById("search-input")
 const taskList = document.getElementById("task-list")
 const emptyMessage = document.getElementById("empty-message")
@@ -15,6 +18,7 @@ const tagList = document.getElementById("tag-list")
 
 const completeAllBtn = document.getElementById("complete-all-btn")
 const clearCompletedBtn = document.getElementById("clear-completed-btn")
+const themeToggleBtn = document.getElementById("theme-toggle")
 
 const taskTemplate = document.getElementById("task-template")
 
@@ -27,8 +31,46 @@ function saveTasks() {
 function loadTasks() {
   const storedTasks = localStorage.getItem("tasks")
 
-  if (storedTasks) {
-    tasks = JSON.parse(storedTasks)
+  if (!storedTasks) return
+
+  const parsedTasks = JSON.parse(storedTasks)
+
+  tasks = parsedTasks.map(task => ({
+    id: task.id,
+    title: task.title ?? "",
+    completed: task.completed ?? false,
+    createdAt: task.createdAt ?? new Date().toISOString(),
+    tag: task.tag ?? "",
+    startAt: task.startAt ?? "",
+    endAt: task.endAt ?? ""
+  }))
+}
+
+function saveTheme(theme) {
+  localStorage.setItem("theme", theme)
+}
+
+function loadTheme() {
+  const savedTheme = localStorage.getItem("theme")
+
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark")
+    themeToggleBtn.textContent = "☀️ Modo claro"
+  } else {
+    document.body.classList.remove("dark")
+    themeToggleBtn.textContent = "🌙 Modo oscuro"
+  }
+}
+
+function toggleTheme() {
+  const isDark = document.body.classList.toggle("dark")
+
+  if (isDark) {
+    saveTheme("dark")
+    themeToggleBtn.textContent = "☀️ Modo claro"
+  } else {
+    saveTheme("light")
+    themeToggleBtn.textContent = "🌙 Modo oscuro"
   }
 }
 
@@ -43,13 +85,26 @@ function formatTag(tag) {
   return normalized.charAt(0).toUpperCase() + normalized.slice(1)
 }
 
-function createTask(title, tag = "") {
+function formatDateTime(value) {
+  if (!value) return ""
+
+  const date = new Date(value)
+
+  return new Intl.DateTimeFormat("es-ES", {
+    dateStyle: "short",
+    timeStyle: "short"
+  }).format(date)
+}
+
+function createTask(title, tag = "", startAt = "", endAt = "") {
   const task = {
     id: crypto.randomUUID(),
     title: title.trim(),
     completed: false,
     createdAt: new Date().toISOString(),
-    tag: normalizeTag(tag)
+    tag: normalizeTag(tag),
+    startAt,
+    endAt
   }
 
   tasks.push(task)
@@ -104,6 +159,76 @@ function renderTagList() {
   })
 }
 
+function getTaskTimingStatus(task) {
+  if (task.completed) {
+    return {
+      text: "Completada",
+      className: "status-completed"
+    }
+  }
+
+  const now = new Date()
+  const startDate = task.startAt ? new Date(task.startAt) : null
+  const endDate = task.endAt ? new Date(task.endAt) : null
+
+  if (endDate && endDate < now) {
+    return {
+      text: "Vencida",
+      className: "status-overdue"
+    }
+  }
+
+  if (startDate && startDate > now) {
+    return {
+      text: "Próxima",
+      className: "status-upcoming"
+    }
+  }
+
+  if (startDate || endDate) {
+    return {
+      text: "Programada",
+      className: "status-scheduled"
+    }
+  }
+
+  return null
+}
+
+function buildScheduleText(task) {
+  const hasStart = task.startAt !== ""
+  const hasEnd = task.endAt !== ""
+
+  if (!hasStart && !hasEnd) return ""
+
+  if (hasStart && hasEnd) {
+    return `🗓 Inicio: ${formatDateTime(task.startAt)} · Fin: ${formatDateTime(task.endAt)}`
+  }
+
+  if (hasStart) {
+    return `🗓 Inicio: ${formatDateTime(task.startAt)}`
+  }
+
+  return `🗓 Fin: ${formatDateTime(task.endAt)}`
+}
+
+function sortTasksForDisplay(taskArray) {
+  return [...taskArray].sort((a, b) => {
+    if (a.completed !== b.completed) {
+      return a.completed - b.completed
+    }
+
+    const aStart = a.startAt ? new Date(a.startAt).getTime() : Number.MAX_SAFE_INTEGER
+    const bStart = b.startAt ? new Date(b.startAt).getTime() : Number.MAX_SAFE_INTEGER
+
+    if (aStart !== bStart) {
+      return aStart - bStart
+    }
+
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  })
+}
+
 function getFilteredTasks() {
   let filteredTasks = [...tasks]
   const searchValue = searchInput.value.trim().toLowerCase()
@@ -124,7 +249,19 @@ function getFilteredTasks() {
     )
   }
 
-  return filteredTasks
+  return sortTasksForDisplay(filteredTasks)
+}
+
+function getEmptyMessage() {
+  if (tasks.length === 0) {
+    return "📋 Empieza añadiendo tu primera tarea."
+  }
+
+  if (searchInput.value.trim() !== "" || statusFilter.value !== "all" || tagFilter.value !== "all") {
+    return "🔍 No hay tareas que coincidan con los filtros actuales."
+  }
+
+  return "🎉 No hay tareas para mostrar."
 }
 
 function editTask(taskId) {
@@ -158,10 +295,41 @@ function completeAllTasks() {
 }
 
 function clearCompletedTasks() {
+  const completedCount = tasks.filter(task => task.completed).length
+
+  if (completedCount === 0) return
+
+  const confirmed = confirm("¿Seguro que quieres borrar todas las tareas completadas?")
+
+  if (!confirmed) return
+
   tasks = tasks.filter(task => !task.completed)
   saveTasks()
   updateTagFilterOptions()
   renderTasks()
+}
+
+function deleteTask(taskId) {
+  const confirmed = confirm("¿Seguro que quieres eliminar esta tarea?")
+
+  if (!confirmed) return
+
+  tasks = tasks.filter(task => task.id !== taskId)
+  saveTasks()
+  updateTagFilterOptions()
+  renderTasks()
+}
+
+function updateStats() {
+  const total = tasks.length
+  const completed = tasks.filter(task => task.completed).length
+  const pending = total - completed
+
+  totalTasks.textContent = total
+  completedTasks.textContent = completed
+  pendingTasks.textContent = pending
+
+  document.title = pending > 0 ? `TaskFlow (${pending} pendientes)` : "TaskFlow"
 }
 
 function renderTasks() {
@@ -169,6 +337,7 @@ function renderTasks() {
 
   const filteredTasks = getFilteredTasks()
 
+  emptyMessage.textContent = getEmptyMessage()
   emptyMessage.style.display = filteredTasks.length === 0 ? "block" : "none"
 
   filteredTasks.forEach(task => {
@@ -178,6 +347,8 @@ function renderTasks() {
     const checkbox = clone.querySelector(".task-checkbox")
     const title = clone.querySelector(".task-title")
     const tag = clone.querySelector(".task-tag")
+    const schedule = clone.querySelector(".task-schedule")
+    const statusBadge = clone.querySelector(".task-status-badge")
     const editBtn = clone.querySelector(".edit-task")
     const deleteBtn = clone.querySelector(".delete-task")
 
@@ -196,6 +367,30 @@ function renderTasks() {
       tag.classList.add("hidden")
     }
 
+    const scheduleText = buildScheduleText(task)
+
+    if (scheduleText) {
+      schedule.textContent = scheduleText
+      schedule.classList.remove("hidden")
+    } else {
+      schedule.textContent = ""
+      schedule.classList.add("hidden")
+    }
+
+    const timingStatus = getTaskTimingStatus(task)
+
+    if (timingStatus) {
+      statusBadge.textContent = timingStatus.text
+      statusBadge.className = `task-status-badge ${timingStatus.className}`
+    } else {
+      statusBadge.textContent = ""
+      statusBadge.className = "task-status-badge hidden"
+    }
+
+    if (timingStatus && timingStatus.className === "status-overdue") {
+      taskItem.classList.add("overdue")
+    }
+
     checkbox.addEventListener("change", () => {
       task.completed = checkbox.checked
       saveTasks()
@@ -207,10 +402,7 @@ function renderTasks() {
     })
 
     deleteBtn.addEventListener("click", () => {
-      tasks = tasks.filter(t => t.id !== task.id)
-      saveTasks()
-      updateTagFilterOptions()
-      renderTasks()
+      deleteTask(task.id)
     })
 
     taskList.appendChild(clone)
@@ -220,28 +412,27 @@ function renderTasks() {
   renderTagList()
 }
 
-function updateStats() {
-  const total = tasks.length
-  const completed = tasks.filter(task => task.completed).length
-  const pending = total - completed
-
-  totalTasks.textContent = total
-  completedTasks.textContent = completed
-  pendingTasks.textContent = pending
-}
-
 taskForm.addEventListener("submit", function (e) {
   e.preventDefault()
 
   const title = taskInput.value.trim()
   const tag = taskTagInput.value.trim()
+  const startAt = taskStartInput.value
+  const endAt = taskEndInput.value
 
   if (title === "") return
 
-  createTask(title, tag)
+  if (startAt && endAt && new Date(endAt) < new Date(startAt)) {
+    alert("La fecha de fin no puede ser anterior a la fecha de inicio.")
+    return
+  }
+
+  createTask(title, tag, startAt, endAt)
 
   taskInput.value = ""
   taskTagInput.value = ""
+  taskStartInput.value = ""
+  taskEndInput.value = ""
 })
 
 statusFilter.addEventListener("change", renderTasks)
@@ -250,7 +441,9 @@ searchInput.addEventListener("input", renderTasks)
 
 completeAllBtn.addEventListener("click", completeAllTasks)
 clearCompletedBtn.addEventListener("click", clearCompletedTasks)
+themeToggleBtn.addEventListener("click", toggleTheme)
 
 loadTasks()
+loadTheme()
 updateTagFilterOptions()
 renderTasks()

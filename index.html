@@ -7,8 +7,13 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>TaskFlow</h1>
+  <header class="app-header">
+    <div class="header-content">
+      <h1>TaskFlow</h1>
+      <button id="theme-toggle" type="button" aria-label="Cambiar modo oscuro">
+        🌙 Modo oscuro
+      </button>
+    </div>
   </header>
 
   <main>
@@ -33,6 +38,26 @@
             name="tag"
             placeholder="Ej: casa, trabajo, estudio"
           >
+        </div>
+
+        <div class="datetime-grid">
+          <div class="form-group">
+            <label for="task-start">Inicio opcional</label>
+            <input
+              type="datetime-local"
+              id="task-start"
+              name="start"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="task-end">Fin opcional</label>
+            <input
+              type="datetime-local"
+              id="task-end"
+              name="end"
+            >
+          </div>
         </div>
 
         <button type="submit">Añadir</button>
@@ -73,7 +98,7 @@
 
     <section class="task-list-section">
       <ul id="task-list"></ul>
-      <p id="empty-message">No hay tareas para mostrar.</p>
+      <p id="empty-message">📋 Empieza añadiendo tu primera tarea.</p>
     </section>
   </main>
 
@@ -104,8 +129,15 @@
       >
 
       <div class="task-content">
-        <span class="task-title"></span>
-        <span class="task-tag"></span>
+        <div class="task-top-row">
+          <span class="task-title"></span>
+          <span class="task-status-badge hidden"></span>
+        </div>
+
+        <div class="task-meta">
+          <span class="task-tag hidden"></span>
+          <p class="task-schedule hidden"></p>
+        </div>
       </div>
 
       <div class="task-buttons">
