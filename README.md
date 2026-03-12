@@ -175,10 +175,18 @@ La aplicación será desplegada utilizando **Vercel**, conectando el repositorio
 Documentación de Vercel:  
 https://vercel.com/docs/deployments/git
 
-Una vez desplegada, la URL pública se añadirá aquí.
+Una vez desplegada, la URL pública se añadirá en la parte superior del README.
 
 ---
+---
 
+# Diseño final
+Como diseño final tras la implantación de los TAGS y fechas de programación opcionales, queda el siguiente resultado:
+
+<img width="720" height="868" alt="image" src="https://github.com/user-attachments/assets/2ca6d2bd-e54f-4bb4-8e5f-986d1bf2a67f" />
+
+
+---
 # Autor
 
 Proyecto realizado como parte de las prácticas en **Corner Studio**.
