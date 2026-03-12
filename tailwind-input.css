@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-100 text-slate-800 transition-colors duration-300;
+  }
+
+  body.dark {
+    @apply bg-slate-900 text-slate-100;
+  }
+}
+
+@layer components {
+  .task-item {
+    @apply flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 transition-all duration-200 md:flex-row md:items-start dark:border-slate-700 dark:bg-slate-800;
+  }
+
+  .task-item.completed .task-title {
+    @apply text-slate-400 line-through dark:text-slate-500;
+  }
+
+  .task-item.overdue {
+    @apply border-red-300 dark:border-red-500;
+  }
+
+  .task-status-badge {
+    @apply inline-block self-start rounded-full px-2 py-1 text-xs font-medium;
+  }
+
+  .task-status-badge.status-scheduled {
+    @apply bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100;
+  }
+
+  .task-status-badge.status-upcoming {
+    @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100;
+  }
+
+  .task-status-badge.status-overdue {
+    @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100;
+  }
+
+  .task-status-badge.status-completed {
+    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-100;
+  }
+
+  .task-tag {
+    @apply inline-block self-start rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-100;
+  }
+
+  .task-schedule {
+    @apply text-sm text-slate-500 dark:text-slate-300;
+  }
+
+  .task-title {
+    @apply break-words text-base font-medium;
+  }
+
+  .edit-task {
+    @apply rounded-xl bg-slate-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-300;
+  }
+
+  .delete-task {
+    @apply rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300;
+  }
+
+  .task-checkbox {
+    @apply mt-1 h-4 w-4 accent-blue-600;
+  }
+}

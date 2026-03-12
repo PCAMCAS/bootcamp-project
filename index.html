@@ -4,119 +4,162 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TaskFlow</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="tailwind.css">
 </head>
-<body>
-  <header class="app-header">
-    <div class="header-content">
-      <h1>TaskFlow</h1>
-      <button id="theme-toggle" type="button" aria-label="Cambiar modo oscuro">
+<body class="min-h-screen px-4 py-4 transition-colors duration-300">
+  <header class="mb-4">
+    <div class="mx-auto flex max-w-3xl flex-col items-stretch gap-3 md:flex-row md:items-center md:justify-between">
+      <h1 class="text-center text-4xl font-bold tracking-tight md:text-left">TaskFlow</h1>
+
+      <button
+        id="theme-toggle"
+        type="button"
+        aria-label="Cambiar modo oscuro"
+        class="min-h-[44px] rounded-xl bg-slate-500 px-4 py-2 font-medium text-white transition hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+      >
         🌙 Modo oscuro
       </button>
     </div>
   </header>
 
-  <main>
-    <section class="task-form-section">
-      <form id="task-form">
-        <div class="form-group">
-          <label for="task-input">Describe tu tarea</label>
+  <main class="mx-auto flex max-w-3xl flex-col gap-4">
+    <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <form id="task-form" class="flex flex-col gap-3">
+        <div class="flex flex-col gap-1.5">
+          <label for="task-input" class="font-semibold">Describe tu tarea</label>
           <input
             type="text"
             id="task-input"
             name="task"
             placeholder="Describe tu tarea"
             required
+            class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-800 outline-none transition focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
           >
         </div>
 
-        <div class="form-group">
-          <label for="task-tag">Tag opcional</label>
+        <div class="flex flex-col gap-1.5">
+          <label for="task-tag" class="font-semibold">Tag opcional</label>
           <input
             type="text"
             id="task-tag"
             name="tag"
             placeholder="Ej: casa, trabajo, estudio"
+            class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-800 outline-none transition focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
           >
         </div>
 
-        <div class="datetime-grid">
-          <div class="form-group">
-            <label for="task-start">Inicio opcional</label>
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div class="flex flex-col gap-1.5">
+            <label for="task-start" class="font-semibold">Inicio opcional</label>
             <input
               type="datetime-local"
               id="task-start"
               name="start"
+              class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-800 outline-none transition focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
             >
           </div>
 
-          <div class="form-group">
-            <label for="task-end">Fin opcional</label>
+          <div class="flex flex-col gap-1.5">
+            <label for="task-end" class="font-semibold">Fin opcional</label>
             <input
               type="datetime-local"
               id="task-end"
               name="end"
+              class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-800 outline-none transition focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
             >
           </div>
         </div>
 
-        <button type="submit">Añadir</button>
+        <button
+          type="submit"
+          class="min-h-[44px] rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        >
+          Añadir
+        </button>
       </form>
     </section>
 
-    <section class="filters-section" aria-label="Filtros de tareas">
-      <div class="filter-group">
-        <label for="search-input">Buscar tarea</label>
+    <section
+      class="grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:grid-cols-3 dark:border-slate-700 dark:bg-slate-800"
+      aria-label="Filtros de tareas"
+    >
+      <div class="flex flex-col gap-1.5">
+        <label for="search-input" class="font-semibold">Buscar tarea</label>
         <input
           type="text"
           id="search-input"
           placeholder="Busca por título..."
+          class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-800 outline-none transition focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
         >
       </div>
 
-      <div class="filter-group">
-        <label for="status-filter">Filtrar por estado</label>
-        <select id="status-filter">
+      <div class="flex flex-col gap-1.5">
+        <label for="status-filter" class="font-semibold">Filtrar por estado</label>
+        <select
+          id="status-filter"
+          class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-800 outline-none transition focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
+        >
           <option value="all">Todas</option>
           <option value="pending">Pendientes</option>
           <option value="completed">Completadas</option>
         </select>
       </div>
 
-      <div class="filter-group">
-        <label for="tag-filter">Filtrar por tag</label>
-        <select id="tag-filter">
+      <div class="flex flex-col gap-1.5">
+        <label for="tag-filter" class="font-semibold">Filtrar por tag</label>
+        <select
+          id="tag-filter"
+          class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-800 outline-none transition focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
+        >
           <option value="all">Todos los tags</option>
         </select>
       </div>
     </section>
 
-    <section class="actions-section" aria-label="Acciones masivas">
-      <button id="complete-all-btn" type="button">Completar todas</button>
-      <button id="clear-completed-btn" type="button">Borrar completadas</button>
+    <section
+      class="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:flex-row dark:border-slate-700 dark:bg-slate-800"
+      aria-label="Acciones masivas"
+    >
+      <button
+        id="complete-all-btn"
+        type="button"
+        class="min-h-[44px] rounded-xl bg-slate-500 px-4 py-2 font-medium text-white transition hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+      >
+        Completar todas
+      </button>
+
+      <button
+        id="clear-completed-btn"
+        type="button"
+        class="min-h-[44px] rounded-xl bg-red-500 px-4 py-2 font-medium text-white transition hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+      >
+        Borrar completadas
+      </button>
     </section>
 
-    <section class="task-list-section">
-      <ul id="task-list"></ul>
-      <p id="empty-message">📋 Empieza añadiendo tu primera tarea.</p>
+    <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <ul id="task-list" class="flex list-none flex-col gap-3"></ul>
+      <p id="empty-message" class="hidden text-slate-500 dark:text-slate-300">
+        📋 Empieza añadiendo tu primera tarea.
+      </p>
     </section>
   </main>
 
-  <aside>
-    <h2>Estadísticas</h2>
-    <ul>
+  <aside class="mx-auto mt-4 max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+    <h2 class="mb-3 text-3xl font-bold">Estadísticas</h2>
+    <ul class="mb-6 flex list-none flex-col gap-2">
       <li>Total: <span id="total-tasks">0</span></li>
       <li>Completadas: <span id="completed-tasks">0</span></li>
       <li>Pendientes: <span id="pending-tasks">0</span></li>
     </ul>
 
-    <h2>Tags creados</h2>
-    <ul id="tag-list">
+    <h2 class="mb-3 text-3xl font-bold">Tags creados</h2>
+    <ul id="tag-list" class="flex list-none flex-col gap-2">
       <li>No hay tags todavía.</li>
     </ul>
   </aside>
 
-  <footer>
+  <footer class="mx-auto mt-4 max-w-3xl text-center text-sm text-slate-500 dark:text-slate-400">
     <p>TaskFlow - Aplicación de gestión de tareas</p>
   </footer>
 
@@ -128,19 +171,19 @@
         aria-label="Marcar tarea como completada"
       >
 
-      <div class="task-content">
-        <div class="task-top-row">
+      <div class="task-content flex min-w-0 flex-1 flex-col gap-2">
+        <div class="task-top-row flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
           <span class="task-title"></span>
           <span class="task-status-badge hidden"></span>
         </div>
 
-        <div class="task-meta">
+        <div class="task-meta flex flex-col gap-2">
           <span class="task-tag hidden"></span>
           <p class="task-schedule hidden"></p>
         </div>
       </div>
 
-      <div class="task-buttons">
+      <div class="task-buttons flex flex-wrap gap-2">
         <button
           class="edit-task"
           type="button"
