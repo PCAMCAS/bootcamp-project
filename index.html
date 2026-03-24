@@ -6,10 +6,10 @@
   <title>TaskFlow</title>
   <link rel="stylesheet" href="tailwind.css">
 </head>
-<body class="min-h-screen px-4 py-4 transition-colors duration-300">
-  <header class="mb-4">
-    <div class="mx-auto flex max-w-3xl flex-col items-stretch gap-3 md:flex-row md:items-center md:justify-between">
-      <h1 class="text-center text-4xl font-bold tracking-tight md:text-left">TaskFlow</h1>
+<body class="page-padding-x min-h-screen py-4 transition-colors duration-300">
+  <header class="mb-4 md:mb-6">
+    <div class="page-shell flex flex-col items-stretch gap-3 md:flex-row md:items-center md:justify-between">
+      <h1 class="text-left text-4xl font-bold tracking-tight">TaskFlow</h1>
 
       <button
         id="theme-toggle"
@@ -22,8 +22,9 @@
     </div>
   </header>
 
-  <main class="mx-auto flex max-w-3xl flex-col gap-4">
-    <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+  <div class="layout-app">
+    <main class="layout-app-main">
+    <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 xl:p-6 dark:border-slate-700 dark:bg-slate-800">
       <form id="task-form" class="flex flex-col gap-3">
         <div class="flex flex-col gap-1.5">
           <label for="task-input" class="font-semibold">Describe tu tarea</label>
@@ -104,7 +105,7 @@
     </section>
 
     <section
-      class="grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:grid-cols-3 dark:border-slate-700 dark:bg-slate-800"
+      class="grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 xl:p-6 md:grid-cols-3 dark:border-slate-700 dark:bg-slate-800"
       aria-label="Filtros de tareas"
     >
       <div class="flex flex-col gap-1.5">
@@ -141,7 +142,7 @@
     </section>
 
     <section
-      class="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:flex-row dark:border-slate-700 dark:bg-slate-800"
+      class="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 xl:p-6 md:flex-row dark:border-slate-700 dark:bg-slate-800"
       aria-label="Acciones masivas"
     >
       <button
@@ -161,26 +162,37 @@
       </button>
     </section>
 
-    <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+    <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 xl:p-6 dark:border-slate-700 dark:bg-slate-800">
       <ul id="task-list" class="flex list-none flex-col gap-3"></ul>
       <p id="empty-message" class="hidden text-slate-500 dark:text-slate-300">
         📋 Empieza añadiendo tu primera tarea.
       </p>
     </section>
-  </main>
+    </main>
 
-  <aside class="mx-auto mt-4 max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-    <h2 class="mb-3 text-3xl font-bold">Estadísticas</h2>
-    <ul class="mb-6 flex list-none flex-col gap-2">
-      <li>Total: <span id="total-tasks">0</span></li>
-      <li>Completadas: <span id="completed-tasks">0</span></li>
-      <li>Pendientes: <span id="pending-tasks">0</span></li>
-    </ul>
+    <aside class="layout-app-sidebar">
+    <h2 class="stat-section-title">Estadísticas</h2>
+    <p class="stat-section-sub">Resumen rápido del estado de tu lista. Los números se actualizan al cambiar las tareas.</p>
 
-    <div class="mb-6">
-      <div class="mb-2 flex items-center justify-between text-sm font-medium">
+    <div class="stat-cards-grid" role="list" aria-label="Resumen de tareas">
+      <article class="stat-card stat-card-total" role="listitem">
+        <p class="stat-card-label">Total</p>
+        <p class="stat-card-value"><span id="total-tasks">0</span></p>
+      </article>
+      <article class="stat-card stat-card-done" role="listitem">
+        <p class="stat-card-label">Completadas</p>
+        <p class="stat-card-value"><span id="completed-tasks">0</span></p>
+      </article>
+      <article class="stat-card stat-card-pending" role="listitem">
+        <p class="stat-card-label">Pendientes</p>
+        <p class="stat-card-value"><span id="pending-tasks">0</span></p>
+      </article>
+    </div>
+
+    <div class="stat-progress-wrap">
+      <div class="stat-progress-head">
         <span>Progreso</span>
-        <span id="progress-text">0%</span>
+        <span id="progress-text" class="tabular-nums text-slate-900 dark:text-slate-100">0%</span>
       </div>
       <div
         class="h-3 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"
@@ -192,18 +204,19 @@
       >
         <div
           id="progress-fill"
-          class="h-full w-0 rounded-full bg-blue-600 transition-all duration-300"
+          class="h-full w-0 rounded-full bg-blue-600 transition-all duration-300 dark:bg-blue-500"
         ></div>
       </div>
     </div>
 
-    <h2 class="mb-3 text-3xl font-bold">Tags creados</h2>
+    <h2 class="mb-3 mt-8 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">Tags creados</h2>
     <ul id="tag-list" class="flex list-none flex-col gap-2">
       <li>No hay tags todavía.</li>
     </ul>
-  </aside>
+    </aside>
+  </div>
 
-  <footer class="mx-auto mt-4 max-w-3xl text-center text-sm text-slate-500 dark:text-slate-400">
+  <footer class="page-shell mt-6 pb-2 text-center text-sm text-slate-500 dark:text-slate-400">
     <p>TaskFlow - Aplicación de gestión de tareas</p>
   </footer>
 

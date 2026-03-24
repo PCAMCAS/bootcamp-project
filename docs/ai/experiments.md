@@ -155,3 +155,53 @@ La IA me ha ayudado a:
 **Resultado:**
 
 Ahora cada tarea tiene una prioridad visible, lo que mejora la organización y permite identificar rápidamente las tareas más importantes.
+
+## Funcionalidad añadida 3: Descripción en tareas
+
+**Lo que he hecho:**
+
+He añadido un campo de descripción opcional a las tareas.
+
+Para ello:
+- he añadido un textarea en el formulario de creación
+- he modificado la estructura de las tareas para incluir la descripción
+- he actualizado el renderizado para mostrar la descripción debajo del título
+
+También he asegurado que las tareas antiguas sigan funcionando correctamente añadiendo un valor por defecto.
+
+**Qué ha hecho la IA:**
+
+La IA me ha ayudado a:
+- generar el campo textarea en el formulario
+- adaptar las funciones para guardar la descripción en cada tarea
+- modificar `loadTasks()` para mantener compatibilidad con datos antiguos
+- implementar la lógica para mostrar u ocultar la descripción según exista
+
+**Resultado:**
+
+Ahora cada tarea puede incluir una descripción adicional, lo que permite añadir más contexto y mejorar la organización del trabajo.
+
+## Funcionalidad añadida 4: Animación al completar tareas
+
+**Lo que he hecho:**
+
+He añadido una animación visual al marcar una tarea como completada.
+
+Para ello:
+- he modificado los estilos de las tarjetas de tarea
+- he añadido transiciones más suaves
+- he aplicado cambios visuales como color de fondo, borde y texto tachado
+
+La animación se aplica automáticamente al cambiar el estado de la tarea.
+
+**Qué ha hecho la IA:**
+
+La IA me ha ayudado a:
+- proponer mejoras visuales utilizando Tailwind CSS
+- ajustar las transiciones para que sean más suaves
+- aplicar estilos diferenciados para tareas completadas
+- mejorar la experiencia de usuario sin modificar la lógica del código
+
+**Resultado:**
+
+Ahora la aplicación tiene una experiencia más fluida y visual, haciendo más evidente cuándo una tarea ha sido completada y mejorando la interacción general.
