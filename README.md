@@ -1,192 +1,266 @@
-## Demo online
+# 🚀 TaskFlow
+
+## 🌐 Demo online
 
 https://bootcamp-project-weld.vercel.app
 
-## Diseño
+---
 
-# TaskFlow
+## 📌 Descripción
 
-TaskFlow es una aplicación web sencilla para gestionar tareas.  
-Permite crear, completar, editar y eliminar tareas, además de filtrarlas y organizarlas mediante tags y programación por fechas.
+**TaskFlow** es una aplicación web sencilla para gestionar tareas.
+
+Permite crear, completar, editar y eliminar tareas, además de filtrarlas y organizarlas mediante tags, prioridades y programación por fechas.
 
 El objetivo de este proyecto es practicar el desarrollo frontend utilizando **HTML, CSS y JavaScript**, además de trabajar con **Git, GitHub y LocalStorage**.
 
 ---
 
-# Diseño
+## 🎨 Diseño
 
 El diseño inicial de la aplicación se realizó previamente antes de comenzar a programar, utilizando un wireframe sencillo para definir la estructura de la interfaz.
 
-El wireframe fue creado con **Excalidraw** y se encuentra guardado dentro del repositorio en:
+El wireframe fue creado con Excalidraw y se encuentra guardado dentro del repositorio en:
 
+👉 `docs/design/taskflow-wireframe.png`
 
-![TaskFlow Wireframe](docs/design/taskflow-wireframe.png)
+### Estructura del diseño
 
-
-El diseño incluye las siguientes secciones principales:
-
-- Cabecera con el nombre de la aplicación
-- Formulario para añadir nuevas tareas
-- Lista de tareas
-- Panel de estadísticas
-- Sistema de tags para clasificar tareas
+* Cabecera con el nombre de la aplicación
+* Formulario para añadir nuevas tareas
+* Lista de tareas
+* Panel de estadísticas
+* Sistema de tags para clasificar tareas
 
 ---
 
-# Funcionalidades
+## ⚙️ Funcionalidades
 
-La aplicación permite realizar las siguientes acciones:
+### 📝 Gestión de tareas
 
-### Gestión de tareas
-- Crear nuevas tareas
-- Marcar tareas como completadas
-- Editar el título de una tarea
-- Eliminar tareas individuales
-- Confirmación antes de eliminar una tarea
+* Crear nuevas tareas
+* Marcar tareas como completadas
+* Editar tareas mediante modal
+* Eliminar tareas individuales
+* Confirmación antes de eliminar una tarea (modal personalizado)
 
-### Organización
-- Añadir **tags opcionales** a las tareas
-- Ver una lista automática de tags creados
-- Filtrar tareas por **estado**
-- Filtrar tareas por **tag**
-- Buscar tareas por texto
+### 🗂️ Organización
 
-### Programación de tareas
+* Añadir tags opcionales a las tareas
+* Ver una lista automática de tags creados
+* Filtrar tareas por estado
+* Filtrar tareas por tag
+* Buscar tareas por texto
+
+### 🧠 Mejora de tareas
+
+* Sistema de prioridad (baja, media, alta)
+* Campo de descripción opcional
+
+### ⏱️ Programación de tareas
+
 Las tareas pueden programarse con:
 
-- Fecha y hora de inicio
-- Fecha y hora de finalización
+* Fecha y hora de inicio
+* Fecha y hora de finalización
 
-Según la fecha configurada la aplicación indica si una tarea está:
+Según la fecha configurada, la aplicación indica si una tarea está:
 
-- Programada
-- Próxima
-- Vencida
-- Completada
+* Programada
+* Próxima
+* Vencida
+* Completada
 
-### Acciones masivas
-- Completar todas las tareas
-- Borrar todas las tareas completadas
+### ⚡ Acciones masivas
 
-### Estadísticas
+* Completar todas las tareas
+* Borrar todas las tareas completadas
+
+### 📊 Estadísticas
+
 La aplicación muestra en tiempo real:
 
-- Total de tareas
-- Tareas completadas
-- Tareas pendientes
+* Total de tareas
+* Tareas completadas
+* Tareas pendientes
+* Barra de progreso visual (%)
 
-### Persistencia de datos
+---
+
+## 💾 Persistencia de datos
+
 Las tareas se guardan automáticamente en **LocalStorage**, por lo que permanecen disponibles aunque se recargue la página.
 
-Documentación oficial de LocalStorage:  
+Documentación oficial:
 https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
 
-### Modo oscuro
-La aplicación incluye un **modo oscuro** que puede activarse desde el botón superior.  
+---
+
+## 🌙 Modo oscuro
+
+La aplicación incluye un modo oscuro que puede activarse desde el botón superior.
+
 La preferencia del usuario se guarda también en LocalStorage.
 
-### Diseño responsive
-La interfaz se adapta correctamente a diferentes tamaños de pantalla, incluyendo dispositivos móviles.
+---
+
+## 📱 Diseño responsive
+
+La interfaz se adapta correctamente a diferentes tamaños de pantalla:
+
+* Móvil
+* Tablet
+* Pantallas grandes (incluyendo 2K)
+
+Incluye:
+
+* Layout con sidebar de estadísticas en escritorio
+* Espaciado adaptativo
+* Componentes optimizados
 
 ---
 
-# Tecnologías utilizadas
+## 🛠️ Tecnologías utilizadas
 
-Este proyecto se ha desarrollado utilizando:
-
-- **HTML5** para la estructura semántica
-- **CSS3** para el diseño y layout responsive
-- **JavaScript (Vanilla JS)** para la lógica de la aplicación
-- **LocalStorage API** para guardar las tareas
-- **Git** para el control de versiones
-- **GitHub** para el repositorio del proyecto
+* HTML5
+* CSS3 + Tailwind
+* JavaScript (Vanilla JS)
+* LocalStorage API
+* Git
+* GitHub
+* Vercel
 
 ---
 
-# Estructura del proyecto
+## 📁 Estructura del proyecto
 
-
+```
 bootcamp-project/
 │
 ├── index.html
-├── style.css
 ├── app.js
+├── package.json
+├── package-lock.json
+├── postcss.config.js
+├── tailwind.config.js
+├── tailwind.css
+├── tailwind-input.css
 ├── README.md
 │
-└── docs/
-└── design/
-└── taskflow-wireframe.png
-
-
----
-
-# Testing manual
-
-Se han realizado las siguientes pruebas manuales para comprobar el funcionamiento de la aplicación.
-
-### Creación de tareas
-- Crear una tarea simple
-- Crear una tarea con tag
-- Crear una tarea con fecha de inicio y fin
-- Intentar crear una tarea sin título
-
-### Gestión de tareas
-- Marcar tareas como completadas
-- Editar una tarea existente
-- Eliminar una tarea
-- Confirmación antes de eliminar
-
-### Filtros
-- Buscar tareas por texto
-- Filtrar por estado
-- Filtrar por tag
-
-### Acciones masivas
-- Completar todas las tareas
-- Borrar todas las tareas completadas
-
-### Persistencia
-- Recargar la página
-- Verificar que las tareas permanecen guardadas
-
-### Responsive
-Se probó la aplicación utilizando las herramientas de desarrollo del navegador para simular distintos dispositivos móviles.
+├── docs/
+│   ├── ai/
+│   │   ├── ai-comparison.md
+│   │   ├── cursor-workflow.md
+│   │   ├── experiments.md
+│   │   ├── prompt-engineering.md
+│   │   └── reflection.md
+│   │
+│   ├── design/
+│   │   └── taskflow-wireframe.png
+│   │
+│   └── upgrades-tutor-jack/
+│
+└── node_modules/
+```
 
 ---
 
-# Accesibilidad
+## 🧪 Testing manual
+
+### ✔️ Creación de tareas
+
+* Crear una tarea simple
+* Crear una tarea con tag
+* Crear una tarea con fecha de inicio y fin
+* Intentar crear una tarea sin título
+
+### ✔️ Gestión de tareas
+
+* Marcar tareas como completadas
+* Editar una tarea existente
+* Eliminar una tarea
+* Confirmación antes de eliminar
+
+### ✔️ Filtros
+
+* Buscar tareas por texto
+* Filtrar por estado
+* Filtrar por tag
+
+### ✔️ Acciones masivas
+
+* Completar todas las tareas
+* Borrar todas las tareas completadas
+
+### ✔️ Persistencia
+
+* Recargar la página
+* Verificar que las tareas permanecen guardadas
+
+### ✔️ Responsive
+
+* Pruebas en distintos tamaños desde herramientas del navegador
+
+---
+
+## ♿ Accesibilidad
 
 Se han aplicado algunas prácticas básicas de accesibilidad:
 
-- Uso de etiquetas `label` correctamente asociadas a los inputs
-- Navegación posible mediante teclado
-- Botones con texto o `aria-label`
-- Estados de foco visibles en elementos interactivos
+* Uso de etiquetas `label` correctamente asociadas a los inputs
+* Navegación mediante teclado
+* Botones con texto o `aria-label`
+* Estados de foco visibles
+* Uso de modales accesibles (`role="dialog"`, `aria-modal`)
 
-Documentación sobre accesibilidad web:  
+Documentación:
 https://www.w3.org/WAI/fundamentals/accessibility-intro/
 
 ---
 
-# Despliegue
+## 🤖 Uso de IA en el proyecto
 
-La aplicación será desplegada utilizando **Vercel**, conectando el repositorio de GitHub para realizar despliegues automáticos.
+Durante el desarrollo se ha utilizado inteligencia artificial para:
 
-Documentación de Vercel:  
+* Generación de funciones
+* Refactorización de código
+* Mejora de interfaz (UI/UX)
+* Detección de errores
+* Documentación del proyecto
+
+Toda la documentación relacionada se encuentra en:
+
+```
+docs/ai/
+```
+
+Incluye:
+
+* Comparación con/sin IA
+* Workflow con Cursor
+* Experimentos
+* Prompt engineering
+* Reflexión final
+
+---
+
+## 🚀 Despliegue
+
+La aplicación está desplegada utilizando **Vercel**, conectando el repositorio de GitHub para despliegues automáticos.
+
+Documentación:
 https://vercel.com/docs/deployments/git
 
-Una vez desplegada, la URL pública se añadirá en la parte superior del README.
-
----
 ---
 
-# Diseño final
-Como diseño final tras la implantación de los TAGS y fechas de programación opcionales, queda el siguiente resultado:
+## 🖼️ Diseño final
 
-<img width="720" height="868" alt="image" src="https://github.com/user-attachments/assets/2ca6d2bd-e54f-4bb4-8e5f-986d1bf2a67f" />
+Como resultado final tras la implementación de tags, prioridades, fechas y mejoras de UI:
 
+<img width="870" height="850" alt="image" src="https://github.com/user-attachments/assets/7614c328-b943-4a57-bb0a-1f7dc78abaf9" />
 
 ---
-# Autor
+
+## 👨‍💻 Autor
 
 Proyecto realizado como parte de las prácticas en **Corner Studio**.
