@@ -111,4 +111,47 @@ Cursor ha refactorizado automáticamente la función:
 
 ## Conclusión
 
-El uso de inteligencia artificial acelera significativamente el desarrollo y mejora la calidad del código en la mayoría de los casos. Sin embargo, es importante entender lo que se genera y no depender completamente de la IA, ya que la comprensión del código sigue siendo clave.
+## Funcionalidad añadida 1: Barra de progreso
+
+**Lo que he hecho:**
+
+He añadido una barra de progreso visual en la sección de estadísticas para mostrar el porcentaje de tareas completadas respecto al total.
+
+La barra se actualiza automáticamente al crear tareas, completarlas, desmarcarlas o eliminarlas.
+
+**Qué ha hecho la IA:**
+
+La IA me ha ayudado a:
+- proponer la estructura HTML de la barra
+- conectarla con la lógica de `updateStats()`
+- calcular el porcentaje de tareas completadas
+- actualizar el texto y el ancho de la barra dinámicamente
+
+**Resultado:**
+
+La aplicación muestra ahora un indicador visual más claro del progreso del usuario, mejorando la experiencia de uso y haciendo más intuitivo el estado general de las tareas.
+
+## Funcionalidad añadida 2: Prioridad en tareas
+
+**Lo que he hecho:**
+
+He añadido un sistema de prioridad a las tareas con tres niveles: baja, media y alta.
+
+Para ello:
+- he añadido un campo de selección en el formulario
+- he modificado la creación de tareas para guardar la prioridad
+- he actualizado el renderizado para mostrar la prioridad como un badge visual en cada tarea
+
+También he comprobado que las tareas antiguas siguen funcionando correctamente asignando una prioridad por defecto.
+
+**Qué ha hecho la IA:**
+
+La IA me ha ayudado a:
+- proponer la estructura del selector de prioridad en el formulario
+- adaptar la función `createTask` para incluir la prioridad
+- modificar `loadTasks()` para mantener compatibilidad con datos antiguos
+- generar la lógica para mostrar la prioridad con estilos visuales (badges de colores)
+
+**Resultado:**
+
+Ahora cada tarea tiene una prioridad visible, lo que mejora la organización y permite identificar rápidamente las tareas más importantes.

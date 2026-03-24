@@ -48,6 +48,17 @@
           >
         </div>
 
+        <div class="flex flex-col gap-1.5">
+          <label for="task-description" class="font-semibold">Descripción opcional</label>
+          <textarea
+            id="task-description"
+            name="description"
+            rows="3"
+            placeholder="Añade más detalles de la tarea..."
+            class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-800 outline-none transition focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
+          ></textarea>
+        </div>
+
         <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div class="flex flex-col gap-1.5">
             <label for="task-start" class="font-semibold">Inicio opcional</label>
@@ -209,6 +220,7 @@
           <span class="task-title"></span>
           <span class="task-status-badge hidden"></span>
         </div>
+        <p class="task-description hidden"></p>
 
         <div class="task-meta flex flex-col gap-2">
           <span class="task-tag hidden"></span>

@@ -1,6 +1,7 @@
 const taskForm = document.getElementById("task-form")
 const taskInput = document.getElementById("task-input")
 const taskTagInput = document.getElementById("task-tag")
+const taskDescriptionInput = document.getElementById("task-description")
 const taskStartInput = document.getElementById("task-start")
 const taskEndInput = document.getElementById("task-end")
 const taskPriorityInput = document.getElementById("task-priority")
@@ -41,6 +42,7 @@ function loadTasks() {
   tasks = parsedTasks.map(task => ({
     id: task.id,
     title: task.title ?? "",
+    description: task.description ?? "",
     completed: task.completed ?? false,
     createdAt: task.createdAt ?? new Date().toISOString(),
     tag: task.tag ?? "",
@@ -131,13 +133,15 @@ function getPriorityMeta(priority) {
   }
 }
 
-function createTask(title, tag = "", startAt = "", endAt = "", priority = "media") {
+function createTask(title, description = "", tag = "", startAt = "", endAt = "", priority = "media") {
   const trimmedTitle = title.trim()
+  const trimmedDescription = description.trim()
   const normalizedTag = normalizeTag(tag)
   const normalizedPriority = normalizePriority(priority)
   const newTask = {
     id: crypto.randomUUID(),
     title: trimmedTitle,
+    description: trimmedDescription,
     completed: false,
     createdAt: new Date().toISOString(),
     tag: normalizedTag,
@@ -441,6 +445,7 @@ function renderTasks() {
     const taskItem = clone.querySelector(".task-item")
     const checkbox = clone.querySelector(".task-checkbox")
     const title = clone.querySelector(".task-title")
+    const description = clone.querySelector(".task-description")
     const tag = clone.querySelector(".task-tag")
     const priority = clone.querySelector(".task-priority")
     const schedule = clone.querySelector(".task-schedule")
@@ -449,6 +454,13 @@ function renderTasks() {
     const deleteBtn = clone.querySelector(".delete-task")
 
     title.textContent = task.title
+    if (task.description) {
+      description.textContent = task.description
+      description.className = "task-description text-sm text-slate-600 dark:text-slate-300"
+    } else {
+      description.textContent = ""
+      description.className = "task-description hidden"
+    }
     checkbox.checked = task.completed
 
     if (task.completed) {
@@ -516,6 +528,7 @@ taskForm.addEventListener("submit", function (e) {
   e.preventDefault()
 
   const title = taskInput.value.trim()
+  const description = taskDescriptionInput.value.trim()
   const tag = taskTagInput.value.trim()
   const startAt = taskStartInput.value
   const endAt = taskEndInput.value
@@ -528,9 +541,10 @@ taskForm.addEventListener("submit", function (e) {
     return
   }
 
-  createTask(title, tag, startAt, endAt, priority)
+  createTask(title, description, tag, startAt, endAt, priority)
 
   taskInput.value = ""
+  taskDescriptionInput.value = ""
   taskTagInput.value = ""
   taskStartInput.value = ""
   taskEndInput.value = ""
