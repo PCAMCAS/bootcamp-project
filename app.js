@@ -26,7 +26,22 @@ const themeToggleBtn = document.getElementById("theme-toggle")
 
 const taskTemplate = document.getElementById("task-template")
 
+const editTaskModal = document.getElementById("edit-task-modal")
+const editTaskForm = document.getElementById("edit-task-form")
+const editTaskTitleInput = document.getElementById("edit-task-title")
+const editTaskDescriptionInput = document.getElementById("edit-task-description")
+const editTaskCancelBtn = document.getElementById("edit-task-cancel")
+const editTaskModalPanel = document.getElementById("edit-task-modal-panel")
+
+const confirmModal = document.getElementById("confirm-modal")
+const confirmModalMessage = document.getElementById("confirm-modal-message")
+const confirmModalConfirmBtn = document.getElementById("confirm-modal-confirm")
+const confirmModalCancelBtn = document.getElementById("confirm-modal-cancel")
+const confirmModalPanel = document.getElementById("confirm-modal-panel")
+
 let tasks = []
+let editingTaskId = null
+let confirmModalAction = null
 
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks))
@@ -307,22 +322,73 @@ function getEmptyMessage() {
   return "🎉 No hay tareas para mostrar."
 }
 
-function editTask(taskId) {
+function syncModalBodyScroll() {
+  const editOpen = !editTaskModal.hasAttribute("hidden")
+  const confirmOpen = !confirmModal.hasAttribute("hidden")
+  document.body.style.overflow = editOpen || confirmOpen ? "hidden" : ""
+}
+
+function openEditTaskModal(taskId) {
   const task = tasks.find(item => item.id === taskId)
 
   if (!task) return
 
-  const newTitle = prompt("Edita el título de la tarea:", task.title)
+  editingTaskId = taskId
+  editTaskTitleInput.value = task.title
+  editTaskDescriptionInput.value = task.description ?? ""
+  editTaskModal.removeAttribute("hidden")
+  syncModalBodyScroll()
+  editTaskTitleInput.focus()
+  editTaskTitleInput.select()
+}
 
-  if (newTitle === null) return
+function closeEditTaskModal() {
+  editingTaskId = null
+  editTaskModal.setAttribute("hidden", "")
+  editTaskForm.reset()
+  syncModalBodyScroll()
+}
 
-  const trimmedTitle = newTitle.trim()
+function openConfirmModal(message, onConfirm) {
+  confirmModalMessage.textContent = message
+  confirmModalAction = onConfirm
+  confirmModal.removeAttribute("hidden")
+  syncModalBodyScroll()
+  confirmModalConfirmBtn.focus()
+}
 
-  if (trimmedTitle === "") return
+function closeConfirmModal() {
+  confirmModalAction = null
+  confirmModal.setAttribute("hidden", "")
+  syncModalBodyScroll()
+}
+
+function saveEditTaskFromModal() {
+  if (!editingTaskId) return
+
+  const task = tasks.find(item => item.id === editingTaskId)
+
+  if (!task) {
+    closeEditTaskModal()
+    return
+  }
+
+  const trimmedTitle = editTaskTitleInput.value.trim()
+
+  if (trimmedTitle === "") {
+    editTaskTitleInput.focus()
+    return
+  }
 
   task.title = trimmedTitle
+  task.description = editTaskDescriptionInput.value.trim()
   saveTasks()
+  closeEditTaskModal()
   renderTasks()
+}
+
+function editTask(taskId) {
+  openEditTaskModal(taskId)
 }
 
 function completeAllTasks() {
@@ -342,25 +408,21 @@ function clearCompletedTasks() {
 
   if (completedCount === 0) return
 
-  const confirmed = confirm("¿Seguro que quieres borrar todas las tareas completadas?")
-
-  if (!confirmed) return
-
-  tasks = tasks.filter(task => !task.completed)
-  saveTasks()
-  updateTagFilterOptions()
-  renderTasks()
+  openConfirmModal("¿Seguro que quieres borrar todas las tareas completadas?", () => {
+    tasks = tasks.filter(task => !task.completed)
+    saveTasks()
+    updateTagFilterOptions()
+    renderTasks()
+  })
 }
 
 function deleteTask(taskId) {
-  const confirmed = confirm("¿Seguro que quieres eliminar esta tarea?")
-
-  if (!confirmed) return
-
-  tasks = tasks.filter(task => task.id !== taskId)
-  saveTasks()
-  updateTagFilterOptions()
-  renderTasks()
+  openConfirmModal("¿Seguro que quieres eliminar esta tarea?", () => {
+    tasks = tasks.filter(task => task.id !== taskId)
+    saveTasks()
+    updateTagFilterOptions()
+    renderTasks()
+  })
 }
 
 function updateStats() {
@@ -558,6 +620,37 @@ searchInput.addEventListener("input", renderTasks)
 completeAllBtn.addEventListener("click", completeAllTasks)
 clearCompletedBtn.addEventListener("click", clearCompletedTasks)
 themeToggleBtn.addEventListener("click", toggleTheme)
+
+editTaskForm.addEventListener("submit", function (e) {
+  e.preventDefault()
+  saveEditTaskFromModal()
+})
+
+editTaskCancelBtn.addEventListener("click", closeEditTaskModal)
+editTaskModalPanel.addEventListener("click", e => e.stopPropagation())
+editTaskModal.addEventListener("click", closeEditTaskModal)
+
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape") return
+  if (!confirmModal.hasAttribute("hidden")) {
+    closeConfirmModal()
+    return
+  }
+  if (!editTaskModal.hasAttribute("hidden")) {
+    closeEditTaskModal()
+  }
+})
+
+confirmModalConfirmBtn.addEventListener("click", () => {
+  if (typeof confirmModalAction === "function") {
+    confirmModalAction()
+  }
+  closeConfirmModal()
+})
+
+confirmModalCancelBtn.addEventListener("click", closeConfirmModal)
+confirmModalPanel.addEventListener("click", e => e.stopPropagation())
+confirmModal.addEventListener("click", closeConfirmModal)
 
 loadTasks()
 loadTheme()

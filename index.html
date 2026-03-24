@@ -220,6 +220,68 @@
     <p>TaskFlow - Aplicación de gestión de tareas</p>
   </footer>
 
+  <div
+    id="edit-task-modal"
+    class="edit-task-modal"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="edit-task-modal-title"
+  >
+    <div id="edit-task-modal-panel" class="edit-task-modal-panel" role="document">
+      <h2 id="edit-task-modal-title" class="mb-4 text-xl font-bold text-slate-900 dark:text-slate-50">
+        Editar tarea
+      </h2>
+      <form id="edit-task-form" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1.5">
+          <label for="edit-task-title" class="font-semibold text-slate-800 dark:text-slate-100">Título</label>
+          <input
+            id="edit-task-title"
+            type="text"
+            name="title"
+            required
+            autocomplete="off"
+            class="edit-task-input"
+          >
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="edit-task-description" class="font-semibold text-slate-800 dark:text-slate-100">Descripción <span class="font-normal text-slate-500 dark:text-slate-400">(opcional)</span></label>
+          <textarea
+            id="edit-task-description"
+            name="description"
+            rows="3"
+            class="edit-task-input"
+          ></textarea>
+        </div>
+        <div class="edit-task-actions">
+          <button type="button" id="edit-task-cancel" class="edit-task-btn-cancel">Cancelar</button>
+          <button type="submit" id="edit-task-save" class="edit-task-btn-save">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div
+    id="confirm-modal"
+    class="confirm-modal"
+    hidden
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="confirm-modal-title"
+    aria-describedby="confirm-modal-message"
+  >
+    <div id="confirm-modal-panel" class="confirm-modal-panel" role="document">
+      <h2 id="confirm-modal-title" class="mb-3 text-xl font-bold text-slate-900 dark:text-slate-50">
+        Confirmar
+      </h2>
+      <p id="confirm-modal-message" class="text-base leading-relaxed text-slate-700 dark:text-slate-300"></p>
+      <div class="confirm-modal-actions">
+        <button type="button" id="confirm-modal-cancel" class="edit-task-btn-cancel">Cancelar</button>
+        <button type="button" id="confirm-modal-confirm" class="confirm-modal-btn-confirm">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
   <template id="task-template">
     <li class="task-item">
       <input

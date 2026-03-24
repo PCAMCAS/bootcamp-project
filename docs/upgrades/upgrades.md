@@ -73,12 +73,27 @@ En pantallas grandes la aplicación aprovecha mucho mejor el espacio, y la secci
 ## Mejora 4: Oscurecer fondo en modales
 
 **Problema:**
-Al mostrar elementos emergentes, el fondo no se oscurecía, lo que dificultaba la experiencia de usuario.
+Al mostrar elementos emergentes, el fondo no se oscurecía y además algunos diálogos aparecían en la parte superior porque dependían de `prompt()` y `confirm()`, que son diálogos nativos del navegador.
 
 **Solución:**
 
 **Lo que he hecho:**
 
+He revisado el sistema de edición y borrado de tareas y he sustituido los diálogos nativos por modales personalizados dentro de la propia aplicación.
+
+También he comprobado que ahora los modales aparecen centrados y bloquean correctamente la interacción con el resto de la interfaz.
+
 **Qué ha hecho la IA:**
 
+La IA me ha ayudado a:
+- reemplazar `prompt()` y `confirm()` por modales personalizados
+- añadir un overlay oscuro semitransparente
+- centrar los modales en pantalla
+- añadir botones de confirmar y cancelar
+- implementar cierre con clic en el fondo y con la tecla Escape
+- coordinar el bloqueo de scroll del `body` cuando hay un modal abierto
+
+**Resultado:**
+
+Ahora los mensajes emergentes aparecen centrados, con un fondo oscurecido detrás, mejorando mucho la experiencia de usuario y haciendo la interfaz más profesional y coherente.
 **Resultado:**

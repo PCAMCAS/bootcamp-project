@@ -199,4 +199,71 @@
   .stat-progress-head {
     @apply mb-2 flex items-center justify-between gap-3 text-sm font-medium text-slate-700 dark:text-slate-200;
   }
+
+  .edit-task-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgb(15 23 42 / 0.65);
+  }
+
+  .edit-task-modal:not([hidden]) {
+    display: flex;
+  }
+
+  .edit-task-modal-panel {
+    @apply relative w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-600 dark:bg-slate-800;
+  }
+
+  .edit-task-input {
+    @apply w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-800 outline-none transition focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100;
+  }
+
+  textarea.edit-task-input {
+    resize: vertical;
+    min-height: 4.5rem;
+  }
+
+  .edit-task-actions {
+    @apply mt-2 flex flex-wrap justify-end gap-2;
+  }
+
+  .edit-task-btn-cancel {
+    @apply min-h-[44px] rounded-xl border border-slate-300 bg-white px-4 py-2 font-medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700;
+  }
+
+  .edit-task-btn-save {
+    @apply min-h-[44px] rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300;
+  }
+
+  .confirm-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgb(15 23 42 / 0.65);
+  }
+
+  .confirm-modal:not([hidden]) {
+    display: flex;
+  }
+
+  .confirm-modal-panel {
+    @apply relative w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-600 dark:bg-slate-800;
+  }
+
+  .confirm-modal-actions {
+    @apply mt-6 flex flex-wrap justify-end gap-2;
+  }
+
+  .confirm-modal-btn-confirm {
+    @apply min-h-[44px] rounded-xl bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300;
+  }
 }
