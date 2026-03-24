@@ -148,6 +148,18 @@ function getPriorityMeta(priority) {
   }
 }
 
+/**
+ * Crea una nueva tarea y la añade al array de tareas.
+ * También guarda en localStorage y actualiza la interfaz.
+ * 
+ * @param {string} title - Título de la tarea
+ * @param {string} tag - Etiqueta asociada a la tarea
+ * @param {string} startAt - Fecha de inicio (opcional)
+ * @param {string} endAt - Fecha de fin (opcional)
+ * @param {string} priority - Prioridad de la tarea (baja, media, alta)
+ * @param {string} description - Descripción de la tarea
+ */
+
 function createTask(title, description = "", tag = "", startAt = "", endAt = "", priority = "media") {
   const trimmedTitle = title.trim()
   const trimmedDescription = description.trim()
@@ -287,6 +299,12 @@ function sortTasksForDisplay(taskArray) {
   })
 }
 
+/**
+ * Filtra las tareas según el estado, tag y texto de búsqueda.
+ * 
+ * @returns {Array} Lista de tareas filtradas y ordenadas
+ */
+
 function getFilteredTasks() {
   let filteredTasks = [...tasks]
   const searchValue = searchInput.value.trim().toLowerCase()
@@ -425,6 +443,11 @@ function deleteTask(taskId) {
   })
 }
 
+/**
+ * Calcula y actualiza las estadísticas de tareas:
+ * total, completadas, pendientes y porcentaje de progreso.
+ */
+
 function updateStats() {
   const total = tasks.length
   const completed = tasks.filter(task => task.completed).length
@@ -493,6 +516,12 @@ function filtrarTareasPorRangoDeFechasYTagYTitulo(tareas, fechaInicio, fechaFin,
 function filtrarTareasPorRangoDeFechasYTagYTituloYCompletadas(tareas, fechaInicio, fechaFin, tag, titulo) {
   return tareas.filter(task => task.startAt && new Date(task.startAt) >= new Date(fechaInicio) && task.endAt && new Date(task.endAt) <= new Date(fechaFin) && task.tag === tag && task.title.toLowerCase().includes(titulo.toLowerCase()) && task.completed)
 }   
+
+/**
+ * Renderiza las tareas en la interfaz aplicando filtros,
+ * ordenación y actualización de elementos del DOM.
+ */
+
 function renderTasks() {
   taskList.innerHTML = ""
 
