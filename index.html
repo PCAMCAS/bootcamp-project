@@ -153,6 +153,26 @@
       <li>Pendientes: <span id="pending-tasks">0</span></li>
     </ul>
 
+    <div class="mb-6">
+      <div class="mb-2 flex items-center justify-between text-sm font-medium">
+        <span>Progreso</span>
+        <span id="progress-text">0%</span>
+      </div>
+      <div
+        class="h-3 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"
+        role="progressbar"
+        aria-label="Porcentaje de tareas completadas"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+      >
+        <div
+          id="progress-fill"
+          class="h-full w-0 rounded-full bg-blue-600 transition-all duration-300"
+        ></div>
+      </div>
+    </div>
+
     <h2 class="mb-3 text-3xl font-bold">Tags creados</h2>
     <ul id="tag-list" class="flex list-none flex-col gap-2">
       <li>No hay tags todavía.</li>

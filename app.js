@@ -11,6 +11,8 @@ const emptyMessage = document.getElementById("empty-message")
 const totalTasks = document.getElementById("total-tasks")
 const completedTasks = document.getElementById("completed-tasks")
 const pendingTasks = document.getElementById("pending-tasks")
+const progressText = document.getElementById("progress-text")
+const progressFill = document.getElementById("progress-fill")
 
 const statusFilter = document.getElementById("status-filter")
 const tagFilter = document.getElementById("tag-filter")
@@ -326,14 +328,70 @@ function updateStats() {
   const total = tasks.length
   const completed = tasks.filter(task => task.completed).length
   const pending = total - completed
+  const completionPercentage = total === 0 ? 0 : Math.round((completed / total) * 100)
 
   totalTasks.textContent = total
   completedTasks.textContent = completed
   pendingTasks.textContent = pending
+  progressText.textContent = `${completionPercentage}%`
+  progressFill.style.width = `${completionPercentage}%`
+
+  const progressContainer = progressFill.parentElement
+
+  if (progressContainer) {
+    progressContainer.setAttribute("aria-valuenow", String(completionPercentage))
+  }
 
   document.title = pending > 0 ? `TaskFlow (${pending} pendientes)` : "TaskFlow"
 }
 
+function filtrarTareasCompletadas(tareas) {
+  return tareas.filter(task => task.completed)
+}
+
+function filtrarTareasPendientes(tareas) {
+  return tareas.filter(task => !task.completed)
+}
+
+function filtrarTareasPorTag(tareas, tag) {
+  return tareas.filter(task => task.tag === tag)
+}
+
+function filtrarTareasPorTitulo(tareas, titulo) {
+  return tareas.filter(task => task.title.toLowerCase().includes(titulo.toLowerCase()))
+}
+
+function filtrarTareasPorFechaInicio(tareas, fechaInicio) {
+  return tareas.filter(task => task.startAt && new Date(task.startAt) >= new Date(fechaInicio))
+}
+
+function filtrarTareasPorFechaFin(tareas, fechaFin) {
+  return tareas.filter(task => task.endAt && new Date(task.endAt) <= new Date(fechaFin))
+}
+
+function filtrarTareasPorFecha(tareas, fecha) {
+  return tareas.filter(task => task.startAt && new Date(task.startAt) <= new Date(fecha) && task.endAt && new Date(task.endAt) >= new Date(fecha))
+}
+
+function filtrarTareasPorRangoDeFechas(tareas, fechaInicio, fechaFin) {
+  return tareas.filter(task => task.startAt && new Date(task.startAt) >= new Date(fechaInicio) && task.endAt && new Date(task.endAt) <= new Date(fechaFin))
+}
+
+function filtrarTareasPorRangoDeFechasYTag(tareas, fechaInicio, fechaFin, tag) {
+  return tareas.filter(task => task.startAt && new Date(task.startAt) >= new Date(fechaInicio) && task.endAt && new Date(task.endAt) <= new Date(fechaFin) && task.tag === tag)
+}
+
+function filtrarTareasPorRangoDeFechasYTitulo(tareas, fechaInicio, fechaFin, titulo) {
+  return tareas.filter(task => task.startAt && new Date(task.startAt) >= new Date(fechaInicio) && task.endAt && new Date(task.endAt) <= new Date(fechaFin) && task.title.toLowerCase().includes(titulo.toLowerCase()))
+}
+
+function filtrarTareasPorRangoDeFechasYTagYTitulo(tareas, fechaInicio, fechaFin, tag, titulo) {
+  return tareas.filter(task => task.startAt && new Date(task.startAt) >= new Date(fechaInicio) && task.endAt && new Date(task.endAt) <= new Date(fechaFin) && task.tag === tag && task.title.toLowerCase().includes(titulo.toLowerCase()))
+}
+
+function filtrarTareasPorRangoDeFechasYTagYTituloYCompletadas(tareas, fechaInicio, fechaFin, tag, titulo) {
+  return tareas.filter(task => task.startAt && new Date(task.startAt) >= new Date(fechaInicio) && task.endAt && new Date(task.endAt) <= new Date(fechaFin) && task.tag === tag && task.title.toLowerCase().includes(titulo.toLowerCase()) && task.completed)
+}   
 function renderTasks() {
   taskList.innerHTML = ""
 
