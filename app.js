@@ -97,20 +97,22 @@ function formatDateTime(value) {
 }
 
 function createTask(title, tag = "", startAt = "", endAt = "") {
-  const task = {
+  const trimmedTitle = title.trim();
+  const normalizedTag = normalizeTag(tag);
+  const newTask = {
     id: crypto.randomUUID(),
-    title: title.trim(),
+    title: trimmedTitle,
     completed: false,
     createdAt: new Date().toISOString(),
-    tag: normalizeTag(tag),
-    startAt,
-    endAt
-  }
+    tag: normalizedTag,
+    startAt: startAt,
+    endAt: endAt
+  };
 
-  tasks.push(task)
-  saveTasks()
-  updateTagFilterOptions()
-  renderTasks()
+  tasks.push(newTask);
+  saveTasks();
+  updateTagFilterOptions();
+  renderTasks();
 }
 
 function getUniqueTags() {
