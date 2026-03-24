@@ -111,6 +111,37 @@ Cursor ha refactorizado automáticamente la función:
 
 ## Conclusión
 
+## Conclusión
+
+A lo largo de estos experimentos he podido comprobar que el uso de inteligencia artificial en programación supone una gran ventaja, especialmente en términos de velocidad y calidad del código generado.
+
+**Lo que he aprendido:**
+
+- La IA permite resolver problemas mucho más rápido, reduciendo el tiempo de desarrollo.
+- Genera soluciones más completas y robustas, teniendo en cuenta casos límite que a veces no se consideran inicialmente.
+- Introduce buenas prácticas y métodos más modernos (como `reduce` o `localeCompare`).
+- Ayuda a detectar errores y mejorar código existente (refactorización).
+
+**Lo que he hecho:**
+
+He implementado soluciones manualmente para entender los conceptos y compararlas con las propuestas por la IA, lo que me ha permitido aprender mejor cómo funcionan las distintas técnicas.
+
+También he aplicado mejoras reales en el proyecto (barra de progreso, prioridad, descripción, animaciones y modales), validando cómo la IA puede integrarse en un flujo de desarrollo real.
+
+**Qué ha hecho la IA:**
+
+La IA ha actuado como asistente de desarrollo, ayudándome a:
+- generar código más eficiente
+- proponer mejoras de arquitectura y diseño
+- refactorizar funciones
+- mejorar la experiencia de usuario (UI/UX)
+
+**Conclusión final:**
+
+La IA no sustituye al desarrollador, pero sí se convierte en una herramienta muy potente para aumentar la productividad, mejorar la calidad del código y acelerar el aprendizaje.
+
+El uso combinado de desarrollo manual + asistencia de IA resulta ser el enfoque más efectivo.
+
 ## Funcionalidad añadida 1: Barra de progreso
 
 **Lo que he hecho:**
