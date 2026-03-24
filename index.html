@@ -70,6 +70,19 @@
           </div>
         </div>
 
+        <div class="flex flex-col gap-1.5">
+          <label for="task-priority" class="font-semibold">Prioridad</label>
+          <select
+            id="task-priority"
+            name="priority"
+            class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-800 outline-none transition focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
+          >
+            <option value="baja">Baja</option>
+            <option value="media" selected>Media</option>
+            <option value="alta">Alta</option>
+          </select>
+        </div>
+
         <button
           type="submit"
           class="min-h-[44px] rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -199,6 +212,7 @@
 
         <div class="task-meta flex flex-col gap-2">
           <span class="task-tag hidden"></span>
+          <span class="task-priority hidden"></span>
           <p class="task-schedule hidden"></p>
         </div>
       </div>

@@ -3,6 +3,7 @@ const taskInput = document.getElementById("task-input")
 const taskTagInput = document.getElementById("task-tag")
 const taskStartInput = document.getElementById("task-start")
 const taskEndInput = document.getElementById("task-end")
+const taskPriorityInput = document.getElementById("task-priority")
 
 const searchInput = document.getElementById("search-input")
 const taskList = document.getElementById("task-list")
@@ -44,7 +45,8 @@ function loadTasks() {
     createdAt: task.createdAt ?? new Date().toISOString(),
     tag: task.tag ?? "",
     startAt: task.startAt ?? "",
-    endAt: task.endAt ?? ""
+    endAt: task.endAt ?? "",
+    priority: task.priority ?? "media"
   }))
 }
 
@@ -98,9 +100,41 @@ function formatDateTime(value) {
   }).format(date)
 }
 
-function createTask(title, tag = "", startAt = "", endAt = "") {
-  const trimmedTitle = title.trim();
-  const normalizedTag = normalizeTag(tag);
+function normalizePriority(priority) {
+  if (priority === "baja" || priority === "media" || priority === "alta") {
+    return priority
+  }
+
+  return "media"
+}
+
+function getPriorityMeta(priority) {
+  const normalizedPriority = normalizePriority(priority)
+
+  if (normalizedPriority === "alta") {
+    return {
+      label: "Prioridad alta",
+      className: "inline-block self-start rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-100"
+    }
+  }
+
+  if (normalizedPriority === "baja") {
+    return {
+      label: "Prioridad baja",
+      className: "inline-block self-start rounded-full bg-emerald-100 px-2 py-1 text-xs font-medium text-emerald-800 dark:bg-emerald-900 dark:text-emerald-100"
+    }
+  }
+
+  return {
+    label: "Prioridad media",
+    className: "inline-block self-start rounded-full bg-amber-100 px-2 py-1 text-xs font-medium text-amber-800 dark:bg-amber-900 dark:text-amber-100"
+  }
+}
+
+function createTask(title, tag = "", startAt = "", endAt = "", priority = "media") {
+  const trimmedTitle = title.trim()
+  const normalizedTag = normalizeTag(tag)
+  const normalizedPriority = normalizePriority(priority)
   const newTask = {
     id: crypto.randomUUID(),
     title: trimmedTitle,
@@ -108,13 +142,14 @@ function createTask(title, tag = "", startAt = "", endAt = "") {
     createdAt: new Date().toISOString(),
     tag: normalizedTag,
     startAt: startAt,
-    endAt: endAt
-  };
+    endAt: endAt,
+    priority: normalizedPriority
+  }
 
-  tasks.push(newTask);
-  saveTasks();
-  updateTagFilterOptions();
-  renderTasks();
+  tasks.push(newTask)
+  saveTasks()
+  updateTagFilterOptions()
+  renderTasks()
 }
 
 function getUniqueTags() {
@@ -407,6 +442,7 @@ function renderTasks() {
     const checkbox = clone.querySelector(".task-checkbox")
     const title = clone.querySelector(".task-title")
     const tag = clone.querySelector(".task-tag")
+    const priority = clone.querySelector(".task-priority")
     const schedule = clone.querySelector(".task-schedule")
     const statusBadge = clone.querySelector(".task-status-badge")
     const editBtn = clone.querySelector(".edit-task")
@@ -426,6 +462,10 @@ function renderTasks() {
       tag.textContent = ""
       tag.classList.add("hidden")
     }
+
+    const priorityMeta = getPriorityMeta(task.priority)
+    priority.textContent = priorityMeta.label
+    priority.className = `task-priority ${priorityMeta.className}`
 
     const scheduleText = buildScheduleText(task)
 
@@ -479,6 +519,7 @@ taskForm.addEventListener("submit", function (e) {
   const tag = taskTagInput.value.trim()
   const startAt = taskStartInput.value
   const endAt = taskEndInput.value
+  const priority = taskPriorityInput.value
 
   if (title === "") return
 
@@ -487,12 +528,13 @@ taskForm.addEventListener("submit", function (e) {
     return
   }
 
-  createTask(title, tag, startAt, endAt)
+  createTask(title, tag, startAt, endAt, priority)
 
   taskInput.value = ""
   taskTagInput.value = ""
   taskStartInput.value = ""
   taskEndInput.value = ""
+  taskPriorityInput.value = "media"
 })
 
 statusFilter.addEventListener("change", renderTasks)
