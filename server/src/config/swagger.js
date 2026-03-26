@@ -20,7 +20,7 @@ const options = {
       },
     ],
   },
-  apis: [path.join(__dirname, '../routes/*.js')],
+  apis: [path.resolve(__dirname, '../routes/task.routes.js')],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
