@@ -1,6 +1,6 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
-const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const { PORT, CLIENT_URL, isProduction } = require('./config/env');
 const loggerAcademico = require('./middlewares/logger.middleware');
@@ -17,7 +17,13 @@ app.use(
 app.use(express.json());
 app.use(loggerAcademico);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// En local sirve la carpeta public; en Vercel public/** se sirve automáticamente
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Swagger spec en JSON
+app.get('/api-docs.json', (req, res) => {
+  return res.status(200).json(swaggerSpec);
+});
 
 app.get('/api/v1/health', (req, res) => {
   return res.status(200).json({ ok: true, message: 'Servidor funcionando' });
