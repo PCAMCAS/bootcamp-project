@@ -39,33 +39,95 @@ const confirmModalConfirmBtn = document.getElementById("confirm-modal-confirm")
 const confirmModalCancelBtn = document.getElementById("confirm-modal-cancel")
 const confirmModalPanel = document.getElementById("confirm-modal-panel")
 
+const API_URL = "http://localhost:3000/api/v1/tasks"
+
 let tasks = []
 let editingTaskId = null
 let confirmModalAction = null
+let isLoading = false
+let errorMessage = ""
 
-function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks))
+/* =========================
+   API
+========================= */
+
+async function fetchTasks() {
+  const response = await fetch(API_URL)
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => null)
+    throw new Error(data?.error || "No se pudieron cargar las tareas.")
+  }
+
+  return response.json()
 }
 
-function loadTasks() {
-  const storedTasks = localStorage.getItem("tasks")
+async function createTaskRequest(taskData) {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(taskData)
+  })
 
-  if (!storedTasks) return
+  const data = await response.json().catch(() => null)
 
-  const parsedTasks = JSON.parse(storedTasks)
+  if (!response.ok) {
+    throw new Error(data?.error || "No se pudo crear la tarea.")
+  }
 
-  tasks = parsedTasks.map(task => ({
-    id: task.id,
-    title: task.title ?? "",
-    description: task.description ?? "",
-    completed: task.completed ?? false,
-    createdAt: task.createdAt ?? new Date().toISOString(),
-    tag: task.tag ?? "",
-    startAt: task.startAt ?? "",
-    endAt: task.endAt ?? "",
-    priority: task.priority ?? "media"
-  }))
+  return data
 }
+
+async function updateTaskRequest(taskId, updates) {
+  const response = await fetch(`${API_URL}/${taskId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(updates)
+  })
+
+  const data = await response.json().catch(() => null)
+
+  if (!response.ok) {
+    throw new Error(data?.error || "No se pudo actualizar la tarea.")
+  }
+
+  return data
+}
+
+async function deleteTaskRequest(taskId) {
+  const response = await fetch(`${API_URL}/${taskId}`, {
+    method: "DELETE"
+  })
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => null)
+    throw new Error(data?.error || "No se pudo eliminar la tarea.")
+  }
+}
+
+async function syncTasksFromApi() {
+  try {
+    isLoading = true
+    errorMessage = ""
+    renderTasks()
+
+    tasks = await fetchTasks()
+  } catch (error) {
+    errorMessage = error.message
+  } finally {
+    isLoading = false
+    updateTagFilterOptions()
+    renderTasks()
+  }
+}
+
+/* =========================
+   Tema
+========================= */
 
 function saveTheme(theme) {
   localStorage.setItem("theme", theme)
@@ -94,6 +156,10 @@ function toggleTheme() {
     themeToggleBtn.textContent = "🌙 Modo oscuro"
   }
 }
+
+/* =========================
+   Helpers
+========================= */
 
 function normalizeTag(tag) {
   return tag.trim().toLowerCase()
@@ -148,37 +214,23 @@ function getPriorityMeta(priority) {
   }
 }
 
-/**
- * Crea una nueva tarea y la añade al array de tareas.
- * También guarda en localStorage y actualiza la interfaz.
- * 
- * @param {string} title - Título de la tarea
- * @param {string} tag - Etiqueta asociada a la tarea
- * @param {string} startAt - Fecha de inicio (opcional)
- * @param {string} endAt - Fecha de fin (opcional)
- * @param {string} priority - Prioridad de la tarea (baja, media, alta)
- * @param {string} description - Descripción de la tarea
- */
-
-function createTask(title, description = "", tag = "", startAt = "", endAt = "", priority = "media") {
+async function createTask(title, description = "", tag = "", startAt = "", endAt = "", priority = "media") {
   const trimmedTitle = title.trim()
   const trimmedDescription = description.trim()
   const normalizedTag = normalizeTag(tag)
   const normalizedPriority = normalizePriority(priority)
-  const newTask = {
-    id: crypto.randomUUID(),
+
+  const newTask = await createTaskRequest({
     title: trimmedTitle,
     description: trimmedDescription,
-    completed: false,
-    createdAt: new Date().toISOString(),
     tag: normalizedTag,
-    startAt: startAt,
-    endAt: endAt,
-    priority: normalizedPriority
-  }
+    startAt,
+    endAt,
+    priority: normalizedPriority,
+    completed: false
+  })
 
   tasks.push(newTask)
-  saveTasks()
   updateTagFilterOptions()
   renderTasks()
 }
@@ -299,12 +351,6 @@ function sortTasksForDisplay(taskArray) {
   })
 }
 
-/**
- * Filtra las tareas según el estado, tag y texto de búsqueda.
- * 
- * @returns {Array} Lista de tareas filtradas y ordenadas
- */
-
 function getFilteredTasks() {
   let filteredTasks = [...tasks]
   const searchValue = searchInput.value.trim().toLowerCase()
@@ -329,6 +375,14 @@ function getFilteredTasks() {
 }
 
 function getEmptyMessage() {
+  if (isLoading) {
+    return "Cargando tareas..."
+  }
+
+  if (errorMessage) {
+    return `Error: ${errorMessage}`
+  }
+
   if (tasks.length === 0) {
     return "📋 Empieza añadiendo tu primera tarea."
   }
@@ -381,7 +435,7 @@ function closeConfirmModal() {
   syncModalBodyScroll()
 }
 
-function saveEditTaskFromModal() {
+async function saveEditTaskFromModal() {
   if (!editingTaskId) return
 
   const task = tasks.find(item => item.id === editingTaskId)
@@ -398,27 +452,45 @@ function saveEditTaskFromModal() {
     return
   }
 
-  task.title = trimmedTitle
-  task.description = editTaskDescriptionInput.value.trim()
-  saveTasks()
-  closeEditTaskModal()
-  renderTasks()
+  try {
+    const updatedTask = await updateTaskRequest(editingTaskId, {
+      title: trimmedTitle,
+      description: editTaskDescriptionInput.value.trim()
+    })
+
+    const index = tasks.findIndex(item => item.id === editingTaskId)
+
+    if (index !== -1) {
+      tasks[index] = updatedTask
+    }
+
+    closeEditTaskModal()
+    renderTasks()
+  } catch (error) {
+    errorMessage = error.message
+    renderTasks()
+  }
 }
 
 function editTask(taskId) {
   openEditTaskModal(taskId)
 }
 
-function completeAllTasks() {
+async function completeAllTasks() {
   if (tasks.length === 0) return
 
-  tasks = tasks.map(task => ({
-    ...task,
-    completed: true
-  }))
+  try {
+    for (const task of tasks) {
+      if (!task.completed) {
+        await updateTaskRequest(task.id, { completed: true })
+      }
+    }
 
-  saveTasks()
-  renderTasks()
+    await syncTasksFromApi()
+  } catch (error) {
+    errorMessage = error.message
+    renderTasks()
+  }
 }
 
 function clearCompletedTasks() {
@@ -426,27 +498,35 @@ function clearCompletedTasks() {
 
   if (completedCount === 0) return
 
-  openConfirmModal("¿Seguro que quieres borrar todas las tareas completadas?", () => {
-    tasks = tasks.filter(task => !task.completed)
-    saveTasks()
-    updateTagFilterOptions()
-    renderTasks()
+  openConfirmModal("¿Seguro que quieres borrar todas las tareas completadas?", async () => {
+    try {
+      const completedTasksList = tasks.filter(task => task.completed)
+
+      for (const task of completedTasksList) {
+        await deleteTaskRequest(task.id)
+      }
+
+      await syncTasksFromApi()
+    } catch (error) {
+      errorMessage = error.message
+      renderTasks()
+    }
   })
 }
 
 function deleteTask(taskId) {
-  openConfirmModal("¿Seguro que quieres eliminar esta tarea?", () => {
-    tasks = tasks.filter(task => task.id !== taskId)
-    saveTasks()
-    updateTagFilterOptions()
-    renderTasks()
+  openConfirmModal("¿Seguro que quieres eliminar esta tarea?", async () => {
+    try {
+      await deleteTaskRequest(taskId)
+      tasks = tasks.filter(task => task.id !== taskId)
+      updateTagFilterOptions()
+      renderTasks()
+    } catch (error) {
+      errorMessage = error.message
+      renderTasks()
+    }
   })
 }
-
-/**
- * Calcula y actualiza las estadísticas de tareas:
- * total, completadas, pendientes y porcentaje de progreso.
- */
 
 function updateStats() {
   const total = tasks.length
@@ -515,15 +595,26 @@ function filtrarTareasPorRangoDeFechasYTagYTitulo(tareas, fechaInicio, fechaFin,
 
 function filtrarTareasPorRangoDeFechasYTagYTituloYCompletadas(tareas, fechaInicio, fechaFin, tag, titulo) {
   return tareas.filter(task => task.startAt && new Date(task.startAt) >= new Date(fechaInicio) && task.endAt && new Date(task.endAt) <= new Date(fechaFin) && task.tag === tag && task.title.toLowerCase().includes(titulo.toLowerCase()) && task.completed)
-}   
-
-/**
- * Renderiza las tareas en la interfaz aplicando filtros,
- * ordenación y actualización de elementos del DOM.
- */
+}
 
 function renderTasks() {
   taskList.innerHTML = ""
+
+  if (isLoading) {
+    emptyMessage.textContent = "Cargando tareas..."
+    emptyMessage.style.display = "block"
+    updateStats()
+    renderTagList()
+    return
+  }
+
+  if (errorMessage) {
+    emptyMessage.textContent = `Error: ${errorMessage}`
+    emptyMessage.style.display = "block"
+    updateStats()
+    renderTagList()
+    return
+  }
 
   const filteredTasks = getFilteredTasks()
 
@@ -545,6 +636,7 @@ function renderTasks() {
     const deleteBtn = clone.querySelector(".delete-task")
 
     title.textContent = task.title
+
     if (task.description) {
       description.textContent = task.description
       description.className = "task-description text-sm text-slate-600 dark:text-slate-300"
@@ -552,6 +644,7 @@ function renderTasks() {
       description.textContent = ""
       description.className = "task-description hidden"
     }
+
     checkbox.checked = task.completed
 
     if (task.completed) {
@@ -594,10 +687,24 @@ function renderTasks() {
       taskItem.classList.add("overdue")
     }
 
-    checkbox.addEventListener("change", () => {
-      task.completed = checkbox.checked
-      saveTasks()
-      renderTasks()
+    checkbox.addEventListener("change", async () => {
+      try {
+        const updatedTask = await updateTaskRequest(task.id, {
+          completed: checkbox.checked
+        })
+
+        const index = tasks.findIndex(item => item.id === task.id)
+
+        if (index !== -1) {
+          tasks[index] = updatedTask
+        }
+
+        renderTasks()
+      } catch (error) {
+        errorMessage = error.message
+        checkbox.checked = !checkbox.checked
+        renderTasks()
+      }
     })
 
     editBtn.addEventListener("click", () => {
@@ -615,7 +722,7 @@ function renderTasks() {
   renderTagList()
 }
 
-taskForm.addEventListener("submit", function (e) {
+taskForm.addEventListener("submit", async function (e) {
   e.preventDefault()
 
   const title = taskInput.value.trim()
@@ -632,14 +739,26 @@ taskForm.addEventListener("submit", function (e) {
     return
   }
 
-  createTask(title, description, tag, startAt, endAt, priority)
+  try {
+    isLoading = true
+    errorMessage = ""
+    renderTasks()
 
-  taskInput.value = ""
-  taskDescriptionInput.value = ""
-  taskTagInput.value = ""
-  taskStartInput.value = ""
-  taskEndInput.value = ""
-  taskPriorityInput.value = "media"
+    await createTask(title, description, tag, startAt, endAt, priority)
+
+    taskInput.value = ""
+    taskDescriptionInput.value = ""
+    taskTagInput.value = ""
+    taskStartInput.value = ""
+    taskEndInput.value = ""
+    taskPriorityInput.value = "media"
+  } catch (error) {
+    errorMessage = error.message
+    renderTasks()
+  } finally {
+    isLoading = false
+    renderTasks()
+  }
 })
 
 statusFilter.addEventListener("change", renderTasks)
@@ -650,9 +769,9 @@ completeAllBtn.addEventListener("click", completeAllTasks)
 clearCompletedBtn.addEventListener("click", clearCompletedTasks)
 themeToggleBtn.addEventListener("click", toggleTheme)
 
-editTaskForm.addEventListener("submit", function (e) {
+editTaskForm.addEventListener("submit", async function (e) {
   e.preventDefault()
-  saveEditTaskFromModal()
+  await saveEditTaskFromModal()
 })
 
 editTaskCancelBtn.addEventListener("click", closeEditTaskModal)
@@ -661,10 +780,12 @@ editTaskModal.addEventListener("click", closeEditTaskModal)
 
 document.addEventListener("keydown", e => {
   if (e.key !== "Escape") return
+
   if (!confirmModal.hasAttribute("hidden")) {
     closeConfirmModal()
     return
   }
+
   if (!editTaskModal.hasAttribute("hidden")) {
     closeEditTaskModal()
   }
@@ -674,6 +795,7 @@ confirmModalConfirmBtn.addEventListener("click", () => {
   if (typeof confirmModalAction === "function") {
     confirmModalAction()
   }
+
   closeConfirmModal()
 })
 
@@ -681,7 +803,5 @@ confirmModalCancelBtn.addEventListener("click", closeConfirmModal)
 confirmModalPanel.addEventListener("click", e => e.stopPropagation())
 confirmModal.addEventListener("click", closeConfirmModal)
 
-loadTasks()
 loadTheme()
-updateTagFilterOptions()
-renderTasks()
+syncTasksFromApi()
