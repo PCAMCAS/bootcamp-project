@@ -1,4 +1,10 @@
+const path = require('path');
 const swaggerJsdoc = require('swagger-jsdoc');
+
+const serverUrl =
+  process.env.NODE_ENV === 'production'
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000';
 
 const options = {
   definition: {
@@ -10,11 +16,11 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: serverUrl,
       },
     ],
   },
-  apis: ['./src/routes/*.js'],
+  apis: [path.join(__dirname, '../routes/*.js')],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
