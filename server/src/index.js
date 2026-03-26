@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
-const { PORT, CLIENT_URL } = require('./config/env');
+const { PORT, CLIENT_URL, isProduction } = require('./config/env');
 const loggerAcademico = require('./middlewares/logger.middleware');
 const taskRoutes = require('./routes/task.routes');
 
@@ -38,8 +38,7 @@ app.use((err, req, res, next) => {
   return res.status(500).json({ error: 'Error interno del servidor' });
 });
 
-// 👇 SOLO para local
-if (process.env.NODE_ENV !== 'production') {
+if (!isProduction) {
   app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
   });

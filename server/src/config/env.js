@@ -5,14 +5,17 @@ dotenv.config({
   path: path.resolve(__dirname, '../../.env'),
 });
 
-const PORT = process.env.PORT;
-const CLIENT_URL = process.env.CLIENT_URL;
+const isProduction = process.env.NODE_ENV === 'production';
 
-if (!PORT) {
+const PORT = process.env.PORT || 3000;
+const CLIENT_URL = process.env.CLIENT_URL || 'http://127.0.0.1:5500';
+
+if (!isProduction && !process.env.PORT) {
   throw new Error('El puerto no está definido');
 }
 
 module.exports = {
   PORT,
   CLIENT_URL,
+  isProduction,
 };
