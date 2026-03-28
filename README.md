@@ -7,8 +7,11 @@ TaskFlow es una aplicación web de gestión de tareas desarrollada como práctic
 - 🚀 **Frontend (App)**  
   https://bootcamp-frontback.vercel.app/
 
-- 🔗 **Backend API (Base URL)**  
-  https://bootcamp-frontback.vercel.app/api/v1
+- ❤️ **Health check**  
+  https://bootcamp-frontback.vercel.app/api/v1/health
+
+- 📋 **Tasks API**  
+  https://bootcamp-frontback.vercel.app/api/v1/tasks
 
 - 📚 **Documentación Swagger**  
   https://bootcamp-frontback.vercel.app/api-docs/
@@ -88,14 +91,8 @@ Durante la evolución del proyecto se han realizado estas integraciones principa
 ├── docs/
 ├── vercel.json
 ├── package.json
-
----
-
-## 🖼️ Diseño final
-
-Como resultado final tras la implementación de tags, prioridades, fechas y mejoras de UI:
-
-<img width="870" height="850" alt="image" src="https://github.com/user-attachments/assets/7614c328-b943-4a57-bb0a-1f7dc78abaf9" />
+<<<<<<< HEAD
+=======
 
 ---
 
