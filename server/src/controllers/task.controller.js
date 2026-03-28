@@ -7,12 +7,18 @@ const getAllTasks = (req, res, next) => {
     const tasks = taskService.obtenerTodas();
     return res.status(200).json(tasks);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
 const createTask = (req, res, next) => {
   try {
+    if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+      return res.status(400).json({
+        error: 'El cuerpo de la petición debe ser un objeto JSON válido.',
+      });
+    }
+
     const {
       title,
       description = '',
@@ -83,7 +89,7 @@ const createTask = (req, res, next) => {
 
     return res.status(201).json(nuevaTarea);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -100,12 +106,18 @@ const deleteTask = (req, res, next) => {
     taskService.eliminarTarea(id);
     return res.status(204).send();
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
 const patchTask = (req, res, next) => {
   try {
+    if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+      return res.status(400).json({
+        error: 'El cuerpo de la petición debe ser un objeto JSON válido.',
+      });
+    }
+
     const id = Number(req.params.id);
     const {
       title,
@@ -157,27 +169,32 @@ const patchTask = (req, res, next) => {
       });
     }
 
-    if (typeof startAt !== 'undefined' && startAt !== '' && Number.isNaN(Date.parse(startAt))) {
+    if (
+      typeof startAt !== 'undefined' &&
+      startAt !== '' &&
+      Number.isNaN(Date.parse(startAt))
+    ) {
       return res.status(400).json({
         error: 'La fecha de inicio no es válida.',
       });
     }
 
-    if (typeof endAt !== 'undefined' && endAt !== '' && Number.isNaN(Date.parse(endAt))) {
+    if (
+      typeof endAt !== 'undefined' &&
+      endAt !== '' &&
+      Number.isNaN(Date.parse(endAt))
+    ) {
       return res.status(400).json({
         error: 'La fecha de fin no es válida.',
       });
     }
 
-    const finalStartAt = typeof startAt !== 'undefined' ? startAt : undefined;
-    const finalEndAt = typeof endAt !== 'undefined' ? endAt : undefined;
-
     if (
-      typeof finalStartAt !== 'undefined' &&
-      typeof finalEndAt !== 'undefined' &&
-      finalStartAt &&
-      finalEndAt &&
-      new Date(finalEndAt) < new Date(finalStartAt)
+      typeof startAt !== 'undefined' &&
+      typeof endAt !== 'undefined' &&
+      startAt &&
+      endAt &&
+      new Date(endAt) < new Date(startAt)
     ) {
       return res.status(400).json({
         error: 'La fecha de fin no puede ser anterior a la fecha de inicio.',
@@ -208,7 +225,7 @@ const patchTask = (req, res, next) => {
 
     return res.status(200).json(updatedTask);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

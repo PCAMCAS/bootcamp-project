@@ -1,10 +1,13 @@
 const path = require('path');
 const swaggerJsdoc = require('swagger-jsdoc');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const serverUrl =
-  process.env.NODE_ENV === 'production'
+  process.env.SERVER_URL ||
+  (isProduction && process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000';
+    : 'http://localhost:3000');
 
 const options = {
   definition: {

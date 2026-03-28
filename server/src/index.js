@@ -10,17 +10,25 @@ const app = express();
 
 app.use(
   cors({
-    origin: CLIENT_URL,
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (origin === CLIENT_URL) {
+        return callback(null, true);
+      }
+
+      return callback(new Error('Origen no permitido por CORS'));
+    }
   })
 );
 
 app.use(express.json());
 app.use(loggerAcademico);
 
-// En local sirve la carpeta public; en Vercel public/** se sirve automáticamente
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Swagger spec en JSON
 app.get('/api-docs.json', (req, res) => {
   return res.status(200).json(swaggerSpec);
 });
@@ -36,8 +44,16 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+
   if (err.message === 'NOT_FOUND') {
     return res.status(404).json({ error: 'Tarea no encontrada' });
+  }
+
+  if (err.message === 'Origen no permitido por CORS') {
+    return res.status(403).json({ error: 'Origen no permitido por CORS' });
   }
 
   console.error(err);

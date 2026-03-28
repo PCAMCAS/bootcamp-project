@@ -39,10 +39,20 @@ const confirmModalConfirmBtn = document.getElementById("confirm-modal-confirm")
 const confirmModalCancelBtn = document.getElementById("confirm-modal-cancel")
 const confirmModalPanel = document.getElementById("confirm-modal-panel")
 
-const API_URL =
-  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-    ? "http://localhost:3000/api/v1/tasks"
-    : "https://bootcamp-project-ezub.vercel.app/api/v1/tasks"
+const LOCAL_API_URL = "http://localhost:3000/api/v1/tasks"
+const PRODUCTION_API_URL = "https://bootcamp-project-ezub.vercel.app/api/v1/tasks"
+
+function isLocalEnvironment() {
+  const hostname = window.location.hostname
+
+  return (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "0.0.0.0"
+  )
+}
+
+const API_URL = isLocalEnvironment() ? LOCAL_API_URL : PRODUCTION_API_URL
 
 let tasks = []
 let editingTaskId = null
