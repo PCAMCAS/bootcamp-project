@@ -36,9 +36,9 @@
     <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-standalone-preset.js" crossorigin></script>
 
     <script>
-      function loadSwagger(url) {
-        return SwaggerUIBundle({
-          url: url,
+      window.onload = () => {
+        SwaggerUIBundle({
+          url: '/api-docs.json',
           dom_id: '#swagger-ui',
           presets: [
             SwaggerUIBundle.presets.apis,
@@ -49,24 +49,6 @@
           docExpansion: 'none',
           tryItOutEnabled: true,
         });
-      }
-
-      window.onload = () => {
-        // Intento principal (correcto en tu backend actual)
-        fetch('/api-docs.json')
-          .then(res => {
-            if (!res.ok) throw new Error('No se pudo cargar swagger');
-            return res.json();
-          })
-          .then(() => {
-            loadSwagger('/api-docs.json');
-          })
-          .catch(() => {
-            // Fallback útil si Vercel rompe rutas (muy típico)
-            console.warn('Fallback Swagger activado');
-
-            loadSwagger('http://localhost:3000/api-docs.json');
-          });
       };
     </script>
   </body>

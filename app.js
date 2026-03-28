@@ -40,7 +40,7 @@ const confirmModalCancelBtn = document.getElementById("confirm-modal-cancel")
 const confirmModalPanel = document.getElementById("confirm-modal-panel")
 
 const LOCAL_API_URL = "http://localhost:3000/api/v1/tasks"
-const PRODUCTION_API_URL = "https://bootcamp-project-ezub.vercel.app/api/v1/tasks"
+const PRODUCTION_API_URL = "/api/v1/tasks"
 
 function isLocalEnvironment() {
   const hostname = window.location.hostname
