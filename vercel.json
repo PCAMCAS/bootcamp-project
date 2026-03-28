@@ -2,20 +2,20 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-      "source": "/api/(.*)",
+      "source": "/api/:path*",
       "destination": "/server.js"
-    },
-    {
-      "source": "/api-docs",
-      "destination": "/server/public/api-docs/index.html"
-    },
-    {
-      "source": "/api-docs/",
-      "destination": "/server/public/api-docs/index.html"
     },
     {
       "source": "/api-docs.json",
       "destination": "/server.js"
+    },
+    {
+      "source": "/api-docs",
+      "destination": "/api-docs/index.html"
+    },
+    {
+      "source": "/api-docs/",
+      "destination": "/api-docs/index.html"
     }
   ]
 }
