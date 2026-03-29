@@ -146,16 +146,35 @@ function saveTheme(theme) {
   localStorage.setItem("theme", theme)
 }
 
+function updateThemeToggleButton() {
+  const isDark = document.body.classList.contains("dark")
+  const iconSpan = themeToggleBtn.querySelector("span[aria-hidden='true']")
+  const textSpan = themeToggleBtn.querySelector("span:not([aria-hidden='true'])")
+
+  if (iconSpan) {
+    iconSpan.textContent = isDark ? "☀️" : "🌙"
+  }
+
+  if (textSpan) {
+    textSpan.textContent = isDark ? "Modo claro" : "Modo oscuro"
+  }
+
+  themeToggleBtn.setAttribute(
+    "aria-label",
+    isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"
+  )
+}
+
 function loadTheme() {
   const savedTheme = localStorage.getItem("theme")
 
   if (savedTheme === "dark") {
     document.body.classList.add("dark")
-    themeToggleBtn.textContent = "☀️ Modo claro"
   } else {
     document.body.classList.remove("dark")
-    themeToggleBtn.textContent = "🌙 Modo oscuro"
   }
+
+  updateThemeToggleButton()
 }
 
 function toggleTheme() {
@@ -163,11 +182,11 @@ function toggleTheme() {
 
   if (isDark) {
     saveTheme("dark")
-    themeToggleBtn.textContent = "☀️ Modo claro"
   } else {
     saveTheme("light")
-    themeToggleBtn.textContent = "🌙 Modo oscuro"
   }
+
+  updateThemeToggleButton()
 }
 
 /* =========================
