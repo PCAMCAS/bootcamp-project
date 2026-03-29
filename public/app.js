@@ -23,6 +23,8 @@ const tagList = document.getElementById("tag-list")
 const completeAllBtn = document.getElementById("complete-all-btn")
 const clearCompletedBtn = document.getElementById("clear-completed-btn")
 const themeToggleBtn = document.getElementById("theme-toggle")
+const themeToggleIcon = document.getElementById("theme-toggle-icon")
+const themeToggleText = document.getElementById("theme-toggle-text")
 
 const taskTemplate = document.getElementById("task-template")
 
@@ -146,23 +148,31 @@ function saveTheme(theme) {
   localStorage.setItem("theme", theme)
 }
 
+function isMobileViewport() {
+  return window.innerWidth < 640
+}
+
 function updateThemeToggleButton() {
   const isDark = document.body.classList.contains("dark")
-  const iconSpan = themeToggleBtn.querySelector("span[aria-hidden='true']")
-  const textSpan = themeToggleBtn.querySelector("span:not([aria-hidden='true'])")
+  const onlyIcon = isMobileViewport()
 
-  if (iconSpan) {
-    iconSpan.textContent = isDark ? "☀️" : "🌙"
+  if (themeToggleIcon) {
+    themeToggleIcon.textContent = isDark ? "☀️" : "🌙"
   }
 
-  if (textSpan) {
-    textSpan.textContent = isDark ? "Modo claro" : "Modo oscuro"
+  if (themeToggleText) {
+    themeToggleText.textContent = isDark ? "Modo claro" : "Modo oscuro"
+    themeToggleText.style.display = onlyIcon ? "none" : "inline"
   }
 
   themeToggleBtn.setAttribute(
     "aria-label",
     isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"
   )
+
+  themeToggleBtn.style.paddingLeft = onlyIcon ? "0.75rem" : "1rem"
+  themeToggleBtn.style.paddingRight = onlyIcon ? "0.75rem" : "1rem"
+  themeToggleBtn.style.gap = onlyIcon ? "0" : "0.5rem"
 }
 
 function loadTheme() {
@@ -800,6 +810,7 @@ searchInput.addEventListener("input", renderTasks)
 completeAllBtn.addEventListener("click", completeAllTasks)
 clearCompletedBtn.addEventListener("click", clearCompletedTasks)
 themeToggleBtn.addEventListener("click", toggleTheme)
+window.addEventListener("resize", updateThemeToggleButton)
 
 editTaskForm.addEventListener("submit", async function (e) {
   e.preventDefault()
