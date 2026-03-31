@@ -1,4 +1,4 @@
-# 🖥 TaskFlow — Aplicación Fullstack de Gestión de Tareas
+#  TaskFlow — Aplicación Fullstack de Gestión de Tareas
 
 > Aplicación fullstack desplegada en Vercel que integra frontend, backend y documentación en un único entorno.
 
@@ -6,7 +6,7 @@ TaskFlow es una aplicación web para la gestión de tareas que permite crear, or
 
 ---
 
-## 📑 Tabla de Contenidos
+##  Tabla de Contenidos
 
 1. [Acceso a la aplicación](#-acceso-a-la-aplicación)
 2. [Arquitectura del proyecto](#-arquitectura-del-proyecto)
@@ -21,23 +21,23 @@ TaskFlow es una aplicación web para la gestión de tareas que permite crear, or
 
 ---
 
-## 🌍 Acceso a la aplicación
+##  Acceso a la aplicación
 
-* 🚀 Frontend
+*  Frontend
   https://bootcamp-frontback.vercel.app/
 
-* ❤️ Health check
+*  Health check
   https://bootcamp-frontback.vercel.app/api/v1/health
 
-* 📦 API
+*  API
   https://bootcamp-frontback.vercel.app/api/v1/tasks
 
-* 📚 Swagger
+*  Swagger
   https://bootcamp-frontback.vercel.app/api-docs/
 
 ---
 
-## 🏗 Arquitectura del proyecto
+##  Arquitectura del proyecto
 
 El proyecto sigue una arquitectura fullstack unificada:
 
@@ -65,7 +65,7 @@ Usuario → Frontend (public/) → API REST → Backend (Express)
 
 ---
 
-## 🏗 Infraestructura del backend
+##  Infraestructura del backend
 
 El backend está desarrollado con **Node.js + Express** y organizado en capas.
 
@@ -89,7 +89,7 @@ HTTP Response
 
 ---
 
-### 🧩 Middleware global
+###  Middleware global
 
 El servidor incluye varios middlewares:
 
@@ -111,7 +111,7 @@ El servidor incluye varios middlewares:
 
 ---
 
-## 🌐 API REST
+##  API REST
 
 ### Base URL
 
@@ -121,7 +121,7 @@ https://bootcamp-frontback.vercel.app/api/v1
 
 ---
 
-### 📌 Endpoints disponibles
+###  Endpoints disponibles
 
 | Método | Endpoint     | Descripción              |
 | ------ | ------------ | ------------------------ |
@@ -133,7 +133,7 @@ https://bootcamp-frontback.vercel.app/api/v1
 
 ---
 
-### 🔹 GET /tasks
+###  GET /tasks
 
 Devuelve todas las tareas almacenadas.
 
@@ -143,7 +143,7 @@ curl /api/v1/tasks
 
 ---
 
-### 🔹 POST /tasks
+###  POST /tasks
 
 Crea una nueva tarea.
 
@@ -166,7 +166,7 @@ Crea una nueva tarea.
 
 ---
 
-### 🔹 PATCH /tasks/:id
+###  PATCH /tasks/:id
 
 Actualiza parcialmente una tarea.
 
@@ -175,13 +175,13 @@ Actualiza parcialmente una tarea.
 
 ---
 
-### 🔹 DELETE /tasks/:id
+###  DELETE /tasks/:id
 
 Elimina una tarea por ID.
 
 ---
 
-## 📐 Modelo de datos
+##  Modelo de datos
 
 ```json
 {
@@ -199,7 +199,7 @@ Elimina una tarea por ID.
 
 ---
 
-## 🎨 Frontend
+##  Frontend
 
 El frontend está desarrollado con:
 
@@ -223,7 +223,7 @@ El frontend está desarrollado con:
 
 ---
 
-## 🚀 Despliegue en Vercel
+##  Despliegue en Vercel
 
 El proyecto utiliza un despliegue unificado:
 
@@ -243,7 +243,7 @@ El proyecto utiliza un despliegue unificado:
 
 ---
 
-## 📚 Documentación Swagger
+##  Documentación Swagger
 
 La API está documentada mediante **swagger-jsdoc** usando comentarios en las rutas.
 
@@ -255,7 +255,7 @@ La API está documentada mediante **swagger-jsdoc** usando comentarios en las ru
 
 ---
 
-## 🧪 Ejecución en local
+##  Ejecución en local
 
 ```bash
 npm install
@@ -270,7 +270,7 @@ http://localhost:3000
 
 ---
 
-## 🧠 Decisiones técnicas
+##  Decisiones técnicas
 
 * Arquitectura por capas (Controller + Service)
 * Validación manual exhaustiva en backend
@@ -283,7 +283,7 @@ http://localhost:3000
 
 ---
 
-## 🧾 Limitaciones actuales
+##  Limitaciones actuales
 
 * Persistencia en memoria (los datos se pierden al reiniciar)
 * No hay autenticación
@@ -291,6 +291,6 @@ http://localhost:3000
 
 ---
 
-## 👨‍💻 Autor
+##  Autor
 
 Proyecto realizado como parte de las prácticas en Corner Studio.
